@@ -1,0 +1,34 @@
+{
+    "schemaVersion": 1,
+    "id": "tooltiptweaks",
+    "version": "1.0",
+    "name": "Tooltip Tweaks",
+    "description": "New, improved, and configurable tooltips",
+    "authors": [
+        "bunten"
+    ],
+    "contact": {
+        "homepage": "https://modrinth.com/mod/tooltiptweaks",
+        "sources": "https://github.com/bunten2005/tooltiptweaks-mod",
+        "issues": "https://github.com/bunten2005/tooltiptweaks-mod/issues"
+    },
+    "license": "MIT",
+    "icon": "assets/tooltiptweaks/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            "net.bunten.tooltiptweaks.TooltipTweaksMod"
+        ],
+        "modmenu": [
+            "net.bunten.tooltiptweaks.config.TooltipModMenu"
+        ]
+    },
+    "mixins": [
+        "tooltiptweaks.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.11.6",
+        "fabric": ">=0.36.1",
+        "modmenu": "*"
+    }
+}

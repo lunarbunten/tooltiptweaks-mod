@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.bunten.tooltiptweaks.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ItemMixin",
+    "ScreenMixin",
+    "ShulkerBoxBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
