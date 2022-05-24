@@ -1,22 +1,21 @@
 package net.bunten.tooltiptweaks;
 
-import com.google.gson.Gson;
-
-import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.tooltip.DurabilityTooltips;
-import net.bunten.tooltiptweaks.tooltip.FoodTooltips;
-import net.bunten.tooltiptweaks.tooltip.HudRenderer;
-import net.bunten.tooltiptweaks.tooltip.ToolTooltips;
-import net.bunten.tooltiptweaks.config.ConfigMenuScreen;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Identifier;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import com.google.gson.Gson;
+
+import net.bunten.tooltiptweaks.config.ConfigMenuScreen;
+import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.tooltip.DurabilityTooltips;
+import net.bunten.tooltiptweaks.tooltip.FoodTooltips;
+import net.bunten.tooltiptweaks.tooltip.ToolTooltips;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.util.Identifier;
 
 public class TooltipTweaksMod implements ClientModInitializer {
     public static final String MOD_ID = "tooltiptweaks";
@@ -50,8 +49,6 @@ public class TooltipTweaksMod implements ClientModInitializer {
             new FoodTooltips().addTooltips(stack, context, lines);
             new ToolTooltips().addTooltips(stack, context, lines);
         });
-
-        HudRenderer.init();
     }
 
     public static void loadSettings() {
