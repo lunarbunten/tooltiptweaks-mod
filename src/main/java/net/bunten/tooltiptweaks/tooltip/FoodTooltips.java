@@ -1,5 +1,7 @@
 package net.bunten.tooltiptweaks.tooltip;
 
+import java.util.List;
+
 import com.mojang.datafixers.util.Pair;
 
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
@@ -13,29 +15,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-
-import java.util.List;
 
 public class FoodTooltips {
 
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
-
-    private LiteralText literal(String key) {
-        return new LiteralText(key);
-    }
-
-    private TranslatableText translatable(String key) {
-        return new TranslatableText(key);
-    }
-
-    private TranslatableText translatable(String key, Object ... args) {
-        return new TranslatableText(key, args);
-    }
 
     private void addFoodTooltips(ItemStack stack, List<Text> lines) {
         var food = stack.getItem().getFoodComponent();
@@ -43,16 +29,16 @@ public class FoodTooltips {
 
         // Add Hunger / Saturation
         if (!(!config.showHungerRestoration && !config.showSaturationRestoration)) {
-            lines.add(literal(" "));
-            lines.add(translatable("tooltiptweaks.ui.food.when_consumed").formatted(Formatting.GRAY));
+            lines.add(Text.literal(" "));
+            lines.add(Text.translatable("tooltiptweaks.ui.food.when_consumed").formatted(Formatting.GRAY));
         }
 
         if (config.showHungerRestoration) {
-            lines.add(literal(" ").append(translatable("tooltiptweaks.ui.food.food", food.getHunger()).formatted(color)));
+            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.food", food.getHunger()).formatted(color)));
         }
 
         if (config.showSaturationRestoration) {
-            lines.add(literal(" ").append(translatable("tooltiptweaks.ui.food.saturation", food.getSaturationModifier() * 2).formatted(color)));
+            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", food.getSaturationModifier() * 2).formatted(color)));
         }
 
         if (config.showFoodStatusEffects) {
@@ -60,23 +46,23 @@ public class FoodTooltips {
             int i = 0;
             for (Pair<StatusEffectInstance, Float> pair : food.getStatusEffects()) {
                 var instance = pair.getFirst();
-                MutableText mutableText = new TranslatableText(instance.getTranslationKey());
+                MutableText mutableText = Text.translatable(instance.getTranslationKey());
                 StatusEffect effect = instance.getEffectType();
 
                 if (instance.getAmplifier() > 0) {
-                    mutableText = new TranslatableText("potion.withAmplifier", mutableText, new TranslatableText("potion.potency." + instance.getAmplifier()));
+                    mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + instance.getAmplifier()));
                 }
 
                 if (instance.getDuration() > 20) {
-                    mutableText = new TranslatableText("potion.withDuration", mutableText, StatusEffectUtil.durationToString(instance, 1));
+                    mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.durationToString(instance, 1));
                 }
 
                 if (!config.hideNegativeFoodEffects || effect.getCategory() != StatusEffectCategory.HARMFUL) {
                     if (food.getStatusEffects().size() > 0 && i == 0) {
-                        lines.add(translatable("tooltiptweaks.ui.food.effects").formatted(Formatting.GRAY));
+                        lines.add(Text.translatable("tooltiptweaks.ui.food.effects").formatted(Formatting.GRAY));
                     }
 
-                    lines.add(literal(" ").append(mutableText.formatted(effect.getCategory().getFormatting())));
+                    lines.add(Text.literal(" ").append(mutableText.formatted(effect.getCategory().getFormatting())));
                     i++;
                 }
             }
@@ -98,22 +84,22 @@ public class FoodTooltips {
                 if ((effect = StatusEffect.byRawId(nbt2.getByte("EffectId"))) == null) continue;
 
                 var instance = new StatusEffectInstance(effect, duration);
-                MutableText mutableText = new TranslatableText(instance.getTranslationKey());
+                MutableText mutableText = Text.translatable(instance.getTranslationKey());
 
                 if (instance.getAmplifier() > 0) {
-                    mutableText = new TranslatableText("potion.withAmplifier", mutableText, new TranslatableText("potion.potency." + instance.getAmplifier()));
+                    mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + instance.getAmplifier()));
                 }
 
                 if (instance.getDuration() > 20) {
-                    mutableText = new TranslatableText("potion.withDuration", mutableText, StatusEffectUtil.durationToString(instance, 1));
+                    mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.durationToString(instance, 1));
                 }
 
                 if (!config.hideNegativeStewEffects || effect.getCategory() != StatusEffectCategory.HARMFUL) {
                     if (effects.size() > 0) {
-                        lines.add(literal("Effects:").formatted(Formatting.GRAY));
+                        lines.add(Text.literal("Effects:").formatted(Formatting.GRAY));
                     }
 
-                    lines.add(literal(" ").append(mutableText.formatted(effect.getCategory().getFormatting())));
+                    lines.add(Text.literal(" ").append(mutableText.formatted(effect.getCategory().getFormatting())));
                 }
             }
         }

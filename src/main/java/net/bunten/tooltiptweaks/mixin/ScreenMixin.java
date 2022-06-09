@@ -1,20 +1,18 @@
 package net.bunten.tooltiptweaks.mixin;
 
-import net.bunten.tooltiptweaks.tooltip.component.ConvertibleTooltipData;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.item.TooltipData;
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.List;
+import net.bunten.tooltiptweaks.tooltip.component.ConvertibleTooltipData;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.item.TooltipData;
 
-@Environment(EnvType.CLIENT)
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
 

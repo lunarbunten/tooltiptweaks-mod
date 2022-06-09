@@ -1,16 +1,23 @@
 {
     "schemaVersion": 1,
     "id": "tooltiptweaks",
-    "version": "1.0",
+    "version": "${version}",
     "name": "Tooltip Tweaks",
     "description": "New, improved, and configurable tooltips",
     "authors": [
         "bunten"
     ],
     "contact": {
-        "homepage": "https://modrinth.com/mod/tooltiptweaks",
         "sources": "https://github.com/bunten2005/tooltiptweaks-mod",
         "issues": "https://github.com/bunten2005/tooltiptweaks-mod/issues"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "tooltiptweaks.curseforge": "https://www.curseforge.com/minecraft/mc-mods/tooltiptweaks",
+                "tooltiptweaks.modrinth": "https://modrinth.com/mod/tooltiptweaks"
+            }
+        }
     },
     "license": "MIT",
     "icon": "assets/tooltiptweaks/icon.png",
@@ -27,8 +34,9 @@
         "tooltiptweaks.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.11.6",
-        "fabric": ">=0.36.1",
-        "modmenu": "*"
+        "minecraft": ">=1.19",
+        "fabricloader": ">=0.14.6",
+        "fabric": ">=0.55.1",
+        "modmenu": ">=4.0.0"
     }
 }

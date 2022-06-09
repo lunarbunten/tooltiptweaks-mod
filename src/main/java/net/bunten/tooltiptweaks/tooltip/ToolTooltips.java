@@ -1,5 +1,10 @@
 package net.bunten.tooltiptweaks.tooltip;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.bunten.tooltiptweaks.util.ClockUtil;
@@ -8,41 +13,27 @@ import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.CompassItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
-import net.minecraft.text.LiteralText;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Optional;
 
 public class ToolTooltips {
 
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
 
-    private LiteralText literal(String key) {
-        return new LiteralText(key);
-    }
-
-    private TranslatableText translatable(String key) {
-        return new TranslatableText(key);
-    }
-
-    private TranslatableText translatable(String key, Object ... args) {
-        return new TranslatableText(key, args);
-    }
-
     private void addClockTooltips(ItemStack stack, List<Text> lines) {
         @Nullable var world = client.world;
 
-        var text = !world.getDimension().isNatural() ? translatable("tooltiptweaks.ui.clock.unknown") : literal(ClockUtil.getClockTime());
+        var text = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.clock.unknown") : Text.literal(ClockUtil.getClockTime());
         var message = text.formatted(Formatting.GRAY);
 
         if (message != null) {
@@ -58,7 +49,7 @@ public class ToolTooltips {
                 boolean bl = nbt.contains("LodestonePos");
                 boolean bl2 = nbt.contains("LodestoneDimension");
                 
-                var dimension = CompassItem.getLodestoneDimension(nbt);
+                var dimension = World.CODEC.parse(NbtOps.INSTANCE, nbt.get("LodestoneDimension")).result();;
                 Optional<RegistryKey<World>> optional;
 
                 @Nullable var world = client.world;
@@ -66,10 +57,10 @@ public class ToolTooltips {
                     var pos = NbtHelper.toBlockPos(nbt.getCompound("LodestonePos"));
 
                     if (Screen.hasShiftDown()) {
-                        lines.add(new TranslatableText("tooltiptweaks.ui.lodestone_compass.position", pos.getX(), pos.getY(), pos.getZ()).formatted(Formatting.DARK_GREEN));
-                        lines.add(new TranslatableText("tooltiptweaks.ui.lodestone_compass.dimension", nbt.getString("LodestoneDimension")).formatted(Formatting.DARK_GREEN));
+                        lines.add(Text.translatable("tooltiptweaks.ui.lodestone_compass.position", pos.getX(), pos.getY(), pos.getZ()).formatted(Formatting.DARK_GREEN));
+                        lines.add(Text.translatable("tooltiptweaks.ui.lodestone_compass.dimension", nbt.getString("LodestoneDimension")).formatted(Formatting.DARK_GREEN));
                     } else {
-                        lines.add(new TranslatableText("tooltiptweaks.ui.lodestone_compass.unshifted").formatted(Formatting.GRAY));
+                        lines.add(Text.translatable("tooltiptweaks.ui.lodestone_compass.unshifted").formatted(Formatting.GRAY));
                     }
                 }
             }
@@ -85,10 +76,10 @@ public class ToolTooltips {
                     var honey = stack.getSubNbt("BlockStateTag").getInt("honey_level");
 
                     if (config.beehiveBeeDisplay) {
-                        lines.add(translatable("tooltiptweaks.ui.beehive.bees", bees).formatted(Formatting.GRAY));
+                        lines.add(Text.translatable("tooltiptweaks.ui.beehive.bees", bees).formatted(Formatting.GRAY));
                     }
                     if (config.beehiveHoneyDisplay) {
-                        lines.add(translatable("tooltiptweaks.ui.beehive.honey", honey).formatted(Formatting.GRAY));
+                        lines.add(Text.translatable("tooltiptweaks.ui.beehive.honey", honey).formatted(Formatting.GRAY));
                     }
                 }
             }

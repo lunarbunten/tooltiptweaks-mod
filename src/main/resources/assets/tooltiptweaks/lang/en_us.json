@@ -1,10 +1,13 @@
 {
+    "tooltiptweaks.modrinth": "Modrinth",
+    "tooltiptweaks.curseforge": "CurseForge",
+    
     "tooltiptweaks.menu.options": "Tooltip Tweaks Configuration",
 
     "tooltiptweaks.options.durability.display": "Display Durability",
     "tooltiptweaks.options.durability.percentage.decimals": "Percentage Decimal Count",
-    "tooltiptweaks.options.durability.remaininguses": "Display \"Remaining Uses\"",
-    "tooltiptweaks.options.durability.remaininguses.threshold": "Low Durability Threshold",
+    "tooltiptweaks.options.durability.remaininguses": "Display \"Uses Left\"",
+    "tooltiptweaks.options.durability.remaininguses.threshold": "Durability Threshold for Uses Left",
 
     "tooltiptweaks.options.food.effects": "Display Status Effects",
     "tooltiptweaks.options.food.hunger": "Display Hunger Restoration",

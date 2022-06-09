@@ -1,34 +1,20 @@
 package net.bunten.tooltiptweaks.tooltip;
 
+import java.util.List;
+
 import com.ibm.icu.text.DecimalFormat;
 
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.List;
 
 public class DurabilityTooltips {
 
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
-
-    private LiteralText literal(String key) {
-        return new LiteralText(key);
-    }
-
-    private TranslatableText translatable(String key) {
-        return new TranslatableText(key);
-    }
-
-    private TranslatableText translatable(String key, Object ... args) {
-        return new TranslatableText(key, args);
-    }
 
     private DecimalFormat getDecimalFormat() {
         String string = "#";
@@ -54,11 +40,11 @@ public class DurabilityTooltips {
         MutableText message;
         switch (config.durabilityDisplay) {
             case 1:
-                message = translatable("tooltiptweaks.ui.durability", getDecimalFormat().format(percent) + "%");
+                message = Text.translatable("tooltiptweaks.ui.durability", getDecimalFormat().format(percent) + "%");
                 lines.add(message.setStyle(message.getStyle().withColor(getTextColor(max, damage))));
                 break;
             case 2:
-                message = translatable("tooltiptweaks.ui.durability", (int) durability + " / " + (int) max);
+                message = Text.translatable("tooltiptweaks.ui.durability", (int) durability + " / " + (int) max);
                 lines.add(message.setStyle(message.getStyle().withColor(getTextColor(max, damage))));
                 break;
             default:
@@ -66,7 +52,7 @@ public class DurabilityTooltips {
         }
 
         if ((config.toolUsesLeft == 2 ? percent <= config.lowDurabilityThreshold : config.toolUsesLeft > 0) && percent > 0) {
-            message = translatable("tooltiptweaks.ui.uses_left", new DecimalFormat("#").format(durability));
+            message = Text.translatable("tooltiptweaks.ui.uses_left", new DecimalFormat("#").format(durability));
             lines.add(message.setStyle(message.getStyle().withColor(getTextColor(max, damage))));
         }
     }
