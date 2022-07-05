@@ -72,14 +72,18 @@ public class ToolTooltips {
             var nbt = BlockItem.getBlockEntityNbt(stack);
             if (nbt != null) {
                 if (nbt.contains(BeehiveBlockEntity.BEES_KEY, NbtElement.LIST_TYPE)) {
-                    var bees = nbt.getList(BeehiveBlockEntity.BEES_KEY, NbtElement.COMPOUND_TYPE).size();
-                    var honey = stack.getSubNbt("BlockStateTag").getInt("honey_level");
-
                     if (config.beehiveBeeDisplay) {
-                        lines.add(Text.translatable("tooltiptweaks.ui.beehive.bees", bees).formatted(Formatting.GRAY));
+                        var list = nbt.getList(BeehiveBlockEntity.BEES_KEY, NbtElement.COMPOUND_TYPE);
+                        if (list != null) {
+                            lines.add(Text.translatable("tooltiptweaks.ui.beehive.bees", list.size()).formatted(Formatting.GRAY));
+                        }
                     }
+
                     if (config.beehiveHoneyDisplay) {
-                        lines.add(Text.translatable("tooltiptweaks.ui.beehive.honey", honey).formatted(Formatting.GRAY));
+                        var tag = stack.getSubNbt("BlockStateTag");
+                        if (tag != null && tag.getString("honey_level") != null) {
+                            lines.add(Text.translatable("tooltiptweaks.ui.beehive.honey", tag.getString("honey_level")).formatted(Formatting.GRAY));
+                        }
                     }
                 }
             }
