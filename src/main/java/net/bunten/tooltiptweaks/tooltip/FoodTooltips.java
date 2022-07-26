@@ -106,12 +106,7 @@ public class FoodTooltips {
     }
 
     public void addTooltips(ItemStack stack, TooltipContext context, List<Text> lines) {
-        if (stack.isFood()) {
-            addFoodTooltips(stack, lines);
-        }
-
-        if (stack.getItem() instanceof SuspiciousStewItem && !config.hideStewEffects) {
-            addStewTooltips(stack, lines);
-        }
+        if (stack.isFood()) addFoodTooltips(stack, lines);
+        if (stack.getItem() instanceof SuspiciousStewItem && !config.hideStewEffects) addStewTooltips(stack, lines);
     }
 }

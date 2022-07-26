@@ -61,8 +61,6 @@ public class DurabilityTooltips {
         float max = stack.getMaxDamage();
         float damage = stack.getDamage();
 
-        if (stack.isDamageable() && stack.isDamaged()) {
-            addDurabilityTooltip(stack, lines, max, damage);
-        }
+        if (stack.isDamageable() && stack.isDamaged()) addDurabilityTooltip(stack, lines, max, damage);
     }
 }

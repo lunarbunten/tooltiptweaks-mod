@@ -1,6 +1,6 @@
 package net.bunten.tooltiptweaks.tooltip;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
@@ -16,28 +16,21 @@ import net.minecraft.util.collection.DefaultedList;
 
 public class ShulkerBoxTooltips {
 
+    private final DefaultedList<ItemStack> INVENTORY = DefaultedList.ofSize(27, ItemStack.EMPTY);
+    private final LinkedHashMap<Item, Integer> ITEM_COUNT_MAP = new LinkedHashMap<Item, Integer>();
+
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
 
     private void addEnhancedTooltips(NbtCompound nbt, List<Text> lines) {
-        // HashMap that will be used to keep track of the item type and the total count
-        var map = new HashMap<Item, Integer>();
-
-        var inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
-        Inventories.readNbt(nbt, inventory);
+        Inventories.readNbt(nbt, INVENTORY);
 
         // Go through the inventory and add items to a HashMap
-        for (ItemStack stack : inventory) {
+        for (ItemStack stack : INVENTORY) {
             if (!stack.isEmpty()) {
                 Item item = stack.getItem();
                 int count = stack.getCount();
 
-                if (!map.containsKey(item)) {
-                    // If the HashMap does not contain the item, add it along with the countof the item
-                    map.put(item, count);
-                } else { 
-                    // If the HashMap already contains the item, readd the item but increment the existing count
-                    map.put(item, map.get(item) + count);
-                }
+                if (!ITEM_COUNT_MAP.containsKey(item)) ITEM_COUNT_MAP.put(item, count); else ITEM_COUNT_MAP.put(item, ITEM_COUNT_MAP.get(item) + count);
             }
         }
 
@@ -46,7 +39,7 @@ public class ShulkerBoxTooltips {
         var moreItems = 0;
 
         // Go through the HashMap and render lines based on the item and count data
-        for (var set : map.entrySet()) {
+        for (var set : ITEM_COUNT_MAP.entrySet()) {
             var name = set.getKey().getName().copyContentOnly();
             var count = set.getValue();
             
@@ -64,14 +57,13 @@ public class ShulkerBoxTooltips {
     }
 
     private void addVanillaTooltips(NbtCompound nbt, List<Text> lines) {
-        DefaultedList<ItemStack> list = DefaultedList.ofSize(27, ItemStack.EMPTY);
-        Inventories.readNbt(nbt, list);
+        Inventories.readNbt(nbt, INVENTORY);
 
         int maxrenderedLines = config.shulkerBoxEntries;
         var renderedLines = 0;
         var moreItems = 0;
 
-        for (ItemStack stack : list) {
+        for (ItemStack stack : INVENTORY) {
             var name = stack.getName().copyContentOnly();
             var count = stack.getCount();
 
@@ -97,7 +89,7 @@ public class ShulkerBoxTooltips {
 
             var display = config.shulkerBoxDisplay;
             if (nbt.contains("Items", 9) && display < 2) {
-                if (display > 0) {
+                if (display > 0 && display != 4) {
                     addEnhancedTooltips(nbt, lines);
                 } else {
                     addVanillaTooltips(nbt, lines);

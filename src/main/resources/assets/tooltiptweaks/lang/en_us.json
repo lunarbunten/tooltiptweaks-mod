@@ -20,8 +20,8 @@
     "tooltiptweaks.options.tools.beehive.honey": "Display Beehive Honey Amount",
     "tooltiptweaks.options.tools.clock.display": "Display Clock Time",
     "tooltiptweaks.options.tools.compass.lodestone": "Display \"SHIFT for coordinates\" for Lodestone Compass",
-    "tooltiptweaks.options.tools.shulker_box.display": "Shulker Box Display",
-    "tooltiptweaks.options.tools.shulker_box.entries": "Shulker Box Previewed Item Lines",
+    "tooltiptweaks.options.tools.shulker_box.display": "Display Shulker Box Contents",
+    "tooltiptweaks.options.tools.shulker_box.entries": "Amount of Shulker Box Lines",
 
     "tooltiptweaks.options.value.12hour": "§a12 Hour Time",
     "tooltiptweaks.options.value.24hour": "§a24 Hour Time",
@@ -34,7 +34,7 @@
     "tooltiptweaks.options.value.shulker_box.vanilla": "§aVanilla (per Stack)",
     "tooltiptweaks.options.value.shulker_box.enhanced": "§aEnhanced (per Item)",
     "tooltiptweaks.options.value.shulker_box.inventory": "§aInventory",
-    "tooltiptweaks.options.value.shulker_box.compact": "§aCompact",
+    "tooltiptweaks.options.value.shulker_box.automatic": "§aAutomatic",
 
     "tooltiptweaks.section.durability": "Durability",
     "tooltiptweaks.section.food": "Food",

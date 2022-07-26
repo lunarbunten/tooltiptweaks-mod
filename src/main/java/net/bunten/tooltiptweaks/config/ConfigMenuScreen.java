@@ -91,12 +91,13 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startBooleanToggle(Text.translatable("tooltiptweaks.options.tools.compass.lodestone"), config.lodestoneCompassDisplay).setDefaultValue(false).setSaveConsumer(newValue -> config.lodestoneCompassDisplay = newValue).build());
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.shulker_box.display"), new Byte [] {
-            0, 1, 2, 3
+            0, 1, 2, 3, 4
         }, config.shulkerBoxDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.shulker_box.vanilla");
             case 1 -> Text.translatable("tooltiptweaks.options.value.shulker_box.enhanced");
             case 2 -> Text.translatable("tooltiptweaks.options.value.shulker_box.inventory");
-            default -> Text.translatable("tooltiptweaks.options.value.shulker_box.compact");
+            case 3 -> Text.translatable("tooltiptweaks.options.value.shulker_box.automatic");
+            default -> Text.translatable("tooltiptweaks.options.value.off");
         }).setSaveConsumer((newValue)->config.shulkerBoxDisplay = newValue).build());
 
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.shulker_box.entries"), config.shulkerBoxEntries, 4, 8).setDefaultValue(6).setSaveConsumer(newValue -> config.shulkerBoxEntries = newValue).build());

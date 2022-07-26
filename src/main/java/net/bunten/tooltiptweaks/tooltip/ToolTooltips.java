@@ -92,14 +92,10 @@ public class ToolTooltips {
 
     public void addTooltips(ItemStack stack, TooltipContext context, List<Text> lines) {
         @Nullable var world = client.world;
+        
         if (world != null) {
-            if (stack.isOf(Items.CLOCK) && config.clockTimeDisplay > 0) {
-                addClockTooltips(stack, lines);
-            }
-
-            if (stack.getItem() instanceof CompassItem) {
-                addCompassTooltips(stack, lines);
-            }
+            if (stack.isOf(Items.CLOCK) && config.clockTimeDisplay > 0) addClockTooltips(stack, lines);
+            if (stack.getItem() instanceof CompassItem) addCompassTooltips(stack, lines);
 
             if (stack.getItem() instanceof BlockItem item) {
                 new ShulkerBoxTooltips().addTooltips(stack, lines);

@@ -25,12 +25,13 @@ public abstract class ItemMixin {
         var item = stack.getItem();
         if (item instanceof BlockItem blockItem) {
             var block = blockItem.getBlock();
-            if (block instanceof ShulkerBoxBlock && TooltipTweaksMod.getConfig().shulkerBoxDisplay > 1) {
+            var display = TooltipTweaksMod.getConfig().shulkerBoxDisplay;
+            if (block instanceof ShulkerBoxBlock && display > 1 && display != 4) {
                 var nbt = BlockItem.getBlockEntityNbt(stack);
                 if (nbt != null) {
                     DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
                     Inventories.readNbt(nbt, inventory);
-                    info.setReturnValue(Optional.of(new ShulkerBoxInventoryTooltip(inventory)));
+                    info.setReturnValue(Optional.of(new ShulkerBoxInventoryTooltip(inventory, display == 3)));
                 }
             }
         }
