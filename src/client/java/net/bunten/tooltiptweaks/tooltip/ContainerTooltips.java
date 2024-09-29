@@ -1,34 +1,35 @@
 package net.bunten.tooltiptweaks.tooltip;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.BlockItem;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.collection.DefaultedList;
 
-public class ShulkerBoxTooltips {
+import java.util.LinkedHashMap;
+import java.util.List;
+
+public class ContainerTooltips {
+
+    private static final Text UNKNOWN_CONTENTS_TEXT = Text.translatable("container.shulkerBox.unknownContents");
 
     private final DefaultedList<ItemStack> INVENTORY = DefaultedList.ofSize(27, ItemStack.EMPTY);
     private final LinkedHashMap<Item, Integer> ITEM_COUNT_MAP = new LinkedHashMap<Item, Integer>();
 
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
 
-    private void addEnhancedTooltips(NbtCompound nbt, List<Text> lines) {
-        Inventories.readNbt(nbt, INVENTORY);
+    private void addEnhancedTooltips(ItemStack stack, List<Text> lines) {
 
         // Go through the inventory and add items to a HashMap
-        for (ItemStack stack : INVENTORY) {
-            if (!stack.isEmpty()) {
-                Item item = stack.getItem();
-                int count = stack.getCount();
+        for (ItemStack itemStack : stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT).iterateNonEmpty()) {
+            if (!itemStack.isEmpty()) {
+                Item item = itemStack.getItem();
+                int count = itemStack.getCount();
 
                 if (!ITEM_COUNT_MAP.containsKey(item)) ITEM_COUNT_MAP.put(item, count); else ITEM_COUNT_MAP.put(item, ITEM_COUNT_MAP.get(item) + count);
             }
@@ -56,16 +57,15 @@ public class ShulkerBoxTooltips {
         }
     }
 
-    private void addVanillaTooltips(NbtCompound nbt, List<Text> lines) {
-        Inventories.readNbt(nbt, INVENTORY);
+    private void addVanillaTooltips(ItemStack stack, List<Text> lines) {
 
         int maxrenderedLines = config.shulkerBoxEntries;
         var renderedLines = 0;
         var moreItems = 0;
 
-        for (ItemStack stack : INVENTORY) {
-            var name = stack.getName().copyContentOnly();
-            var count = stack.getCount();
+        for (ItemStack itemStack : stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT).iterateNonEmpty()) {
+            var name = itemStack.getName().copyContentOnly();
+            var count = itemStack.getCount();
 
             if (renderedLines < maxrenderedLines) {
                 lines.add(name.formatted(Formatting.GRAY).append(Text.translatable("tooltiptweaks.ui.shulker_box.entry", count).formatted(Formatting.WHITE)));
@@ -80,20 +80,17 @@ public class ShulkerBoxTooltips {
         }
     }
 
-    public void addTooltips(ItemStack stack, List<Text> lines) {
-        var nbt = BlockItem.getBlockEntityNbt(stack);
-        if (nbt != null) {
-            if (nbt.contains("LootTable", 8)) {
-                lines.add(Text.literal("???????"));
-            }
+    public void addTooltips(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
+        if (stack.contains(DataComponentTypes.CONTAINER_LOOT)) {
+            lines.add(UNKNOWN_CONTENTS_TEXT);
+        }
 
-            var display = config.shulkerBoxDisplay;
-            if (nbt.contains("Items", 9) && display < 2) {
-                if (display > 0 && display != 4) {
-                    addEnhancedTooltips(nbt, lines);
-                } else {
-                    addVanillaTooltips(nbt, lines);
-                }
+        var display = config.shulkerBoxDisplay;
+        if (stack.getComponents().contains(DataComponentTypes.CONTAINER) && display < 2) {
+            if (display > 0 && display != 4) {
+                addEnhancedTooltips(stack, lines);
+            } else {
+                addVanillaTooltips(stack, lines);
             }
         }
     }

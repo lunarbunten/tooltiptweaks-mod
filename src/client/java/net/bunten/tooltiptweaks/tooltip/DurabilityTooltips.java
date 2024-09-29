@@ -1,16 +1,16 @@
 package net.bunten.tooltiptweaks.tooltip;
 
-import java.util.List;
-
 import com.ibm.icu.text.DecimalFormat;
-
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.List;
 
 public class DurabilityTooltips {
 
@@ -57,7 +57,7 @@ public class DurabilityTooltips {
         }
     }
     
-    public void addTooltips(ItemStack stack, TooltipContext context, List<Text> lines) {
+    public void addTooltips(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
         float max = stack.getMaxDamage();
         float damage = stack.getDamage();
 

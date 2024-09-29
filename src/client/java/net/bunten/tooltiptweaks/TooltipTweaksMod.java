@@ -1,21 +1,20 @@
 package net.bunten.tooltiptweaks;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import com.google.gson.Gson;
-
 import net.bunten.tooltiptweaks.config.ConfigMenuScreen;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.tooltip.ContainerTooltips;
 import net.bunten.tooltiptweaks.tooltip.DurabilityTooltips;
 import net.bunten.tooltiptweaks.tooltip.FoodTooltips;
 import net.bunten.tooltiptweaks.tooltip.ToolTooltips;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class TooltipTweaksMod implements ClientModInitializer {
     public static final String MOD_ID = "tooltiptweaks";
@@ -24,11 +23,7 @@ public class TooltipTweaksMod implements ClientModInitializer {
     public static ConfigMenuScreen configMenu;
 
     public static Identifier id(String path) {
-        return new Identifier(MOD_ID, path);
-    }
-
-    public static boolean isDevelopment() {
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
+        return Identifier.of(MOD_ID, path);
     }
 
     public static TooltipTweaksConfig getConfig() {
@@ -44,10 +39,11 @@ public class TooltipTweaksMod implements ClientModInitializer {
         loadSettings();
         configMenu = new ConfigMenuScreen();
 
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
-            new DurabilityTooltips().addTooltips(stack, context, lines);
-            new FoodTooltips().addTooltips(stack, context, lines);
-            new ToolTooltips().addTooltips(stack, context, lines);
+        ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
+            new ContainerTooltips().addTooltips(stack, context, type, lines);
+            new DurabilityTooltips().addTooltips(stack, context, type, lines);
+            new FoodTooltips().addTooltips(stack, context, type, lines);
+            new ToolTooltips().addTooltips(stack, context, type, lines);
         });
     }
 

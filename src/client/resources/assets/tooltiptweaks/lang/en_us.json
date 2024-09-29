@@ -16,8 +16,6 @@
     "tooltiptweaks.options.food.stew": "Hide Suspicious Stew Effects",
     "tooltiptweaks.options.food.stew.negative": "Hide Negative Suspicious Stew Effects",
 
-    "tooltiptweaks.options.tools.beehive.bees": "Display Beehive Bee Count",
-    "tooltiptweaks.options.tools.beehive.honey": "Display Beehive Honey Amount",
     "tooltiptweaks.options.tools.clock.display": "Display Clock Time",
     "tooltiptweaks.options.tools.compass.lodestone": "Display \"SHIFT for coordinates\" for Lodestone Compass",
     "tooltiptweaks.options.tools.shulker_box.display": "Display Shulker Box Contents",
@@ -40,8 +38,6 @@
     "tooltiptweaks.section.food": "Food",
     "tooltiptweaks.section.tools": "Etc",
 
-    "tooltiptweaks.ui.beehive.bees": "%s Bees Inside",
-    "tooltiptweaks.ui.beehive.honey": "%s Honey",
     "tooltiptweaks.ui.clock.unknown": "???",
     "tooltiptweaks.ui.lodestone_compass.dimension": "Dimension: \"%s\"",
     "tooltiptweaks.ui.lodestone_compass.position": "Linked to \"%s, %s, %s\"",

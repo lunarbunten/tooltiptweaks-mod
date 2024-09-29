@@ -37,7 +37,7 @@ public class ConfigMenuScreen {
         addToolOptions(entryBuilder, tools);
         general.addEntry(tools.build());
         
-        return builder.setTransparentBackground(isTransparent).build();
+        return builder.setTransparentBackground(true).build();
     }
 
     private void addDurabilityOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
@@ -74,10 +74,6 @@ public class ConfigMenuScreen {
     }
 
     private void addToolOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
-        // Beehive Data
-        category.add(entryBuilder.startBooleanToggle(Text.translatable("tooltiptweaks.options.tools.beehive.bees"), config.beehiveBeeDisplay).setDefaultValue(true).setSaveConsumer(newValue -> config.beehiveBeeDisplay = newValue).build());
-        category.add(entryBuilder.startBooleanToggle(Text.translatable("tooltiptweaks.options.tools.beehive.honey"), config.beehiveHoneyDisplay).setDefaultValue(false).setSaveConsumer(newValue -> config.beehiveHoneyDisplay = newValue).build());
-        
         // Clock Time
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.display"), new Byte [] {
             0, 1, 2
@@ -101,16 +97,5 @@ public class ConfigMenuScreen {
         }).setSaveConsumer((newValue)->config.shulkerBoxDisplay = newValue).build());
 
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.shulker_box.entries"), config.shulkerBoxEntries, 4, 8).setDefaultValue(6).setSaveConsumer(newValue -> config.shulkerBoxEntries = newValue).build());
-    }
-
-    public Text[] wrapLines(Text text) {
-        final MinecraftClient client = MinecraftClient.getInstance();
-        List<StringVisitable> lines = client.textRenderer.getTextHandler().wrapLines(text, Math.max(client.getWindow().getWidth() / 2 - 43, 170), Style.EMPTY);
-        lines.get(0).getString();
-        Text[] textLines = new Text[lines.size()];
-        for (int i = 0; i < lines.size(); i++) {
-            textLines[i] = Text.literal(lines.get(i).getString());
-        }
-        return textLines;
     }
 }

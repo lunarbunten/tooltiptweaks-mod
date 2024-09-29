@@ -14,9 +14,6 @@ public class TooltipTweaksConfig {
     public boolean hideStewEffects = false;
     public boolean hideNegativeStewEffects = false;
 
-    public boolean beehiveBeeDisplay = true;
-    public boolean beehiveHoneyDisplay = false;
-
     public byte clockTimeDisplay = 1;
     public boolean lodestoneCompassDisplay = false;
 
