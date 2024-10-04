@@ -2,7 +2,6 @@ package net.bunten.tooltiptweaks.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.minecraft.client.MinecraftClient;
 
