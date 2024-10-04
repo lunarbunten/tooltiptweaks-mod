@@ -1,0 +1,58 @@
+package net.bunten.tooltiptweaks.tooltip.component;
+
+import net.bunten.tooltiptweaks.TooltipTweaksMod;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.component.type.ContainerComponent;
+import net.minecraft.item.ItemStack;
+
+import java.util.List;
+
+public class ContainerInventoryTooltip extends CustomTooltip {
+    private final ContainerComponent component;
+
+    public ContainerInventoryTooltip(ContainerComponent component) {
+        this.component = component;
+    }
+
+    private boolean isEmpty() {
+        return component.stream().filter(stack -> (!stack.isEmpty())).toList().isEmpty();
+    }
+
+    @Override
+    public int getHeight() {
+        if (isEmpty()) return 0;
+        return 59;
+    }
+
+    @Override
+    public int getWidth(TextRenderer textRenderer) {
+        if (isEmpty()) return 0;
+        return 164;
+    }
+
+    @Override
+    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+        if (isEmpty()) return;
+
+        context.drawTexture(TooltipTweaksMod.id("textures/gui/container.png"), x, y, 0, 0, 172, 64, 256, 128);
+
+        int xOffset = 2;
+        int yOffset = -16;
+
+        List<ItemStack> list = component.stream().toList();
+
+        for (int i = 0; i < list.size(); i++) {
+            ItemStack stack = list.get(i);
+            xOffset += 18;
+
+            if (i % 9 == 0) {
+                xOffset = 2;
+                yOffset += 18;
+            }
+
+            context.drawItem(stack, x + xOffset, y + yOffset);
+            context.drawItemInSlot(textRenderer, stack, x + xOffset, y + yOffset);
+        }
+    }
+}
