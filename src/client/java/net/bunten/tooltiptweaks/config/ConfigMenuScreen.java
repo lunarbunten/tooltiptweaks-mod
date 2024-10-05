@@ -7,17 +7,21 @@ import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class ConfigMenuScreen {
     
     TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
+    
+    private static final Formatting ENABLED_FORMATTING = Formatting.GREEN;
+    private static final Formatting DISABLED_FORMATTING = Formatting.WHITE;
 
     public Screen getConfigScreen(Screen parent, boolean isTransparent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(Text.translatable("tooltiptweaks.menu.options"));
 
         builder.setSavingRunnable(TooltipTweaksMod::saveSettings);
 
-        ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
+        ConfigCategory general = builder.getOrCreateCategory(Text.literal("General").formatted(ENABLED_FORMATTING));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         SubCategoryBuilder tools = entryBuilder.startSubCategory(Text.translatable("tooltiptweaks.section.tools"));
@@ -46,9 +50,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.display"), new Byte [] {
                 0, 1, 2
         }, config.clockTimeDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.none");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.12hour");
-            default -> Text.translatable("tooltiptweaks.options.value.24hour");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.none").formatted(DISABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.12hour").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.24hour").formatted(ENABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.clockTimeDisplay = newValue).build());
 
         // Compass Display Style
@@ -56,9 +60,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.compass"), new Byte [] {
                 0, 1, 2
         }, config.compassDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.compass.distance");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.compass.coordinates");
-            default -> Text.translatable("tooltiptweaks.options.value.none");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.compass.distance").formatted(ENABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.compass.coordinates").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.none").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.compassDisplay = newValue).build());
 
         // Container Display Style
@@ -66,10 +70,10 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.container.display"), new Byte [] {
                 0, 1, 2, 3
         }, config.containerDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.container.per_item");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.container.per_stack");
-            case 2 -> Text.translatable("tooltiptweaks.options.value.container.inventory");
-            default -> Text.translatable("tooltiptweaks.options.value.vanilla");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.container.per_item").formatted(ENABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.container.per_stack").formatted(ENABLED_FORMATTING);
+            case 2 -> Text.translatable("tooltiptweaks.options.value.container.inventory").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.vanilla").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.containerDisplay = newValue).build());
 
         // Container Entry Count
@@ -81,8 +85,8 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.repair_cost"), new Byte [] {
                 0, 1
         }, config.repairCostDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.repairCostDisplay = newValue).build());
     }
 
@@ -93,9 +97,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.durability.display"), new Byte [] {
             0, 1, 2
         }, config.durabilityDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.none");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.percentage");
-            default -> Text.translatable("tooltiptweaks.options.value.fraction");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.none").formatted(DISABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.percentage").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.fraction").formatted(ENABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.durabilityDisplay = newValue).build());
 
         // Decimal Count
@@ -107,8 +111,8 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.durability.uses_left"), new Byte [] {
             0, 1
         }, config.displayUsesLeft).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.no");
-            default -> Text.translatable("tooltiptweaks.options.value.yes");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.displayUsesLeft = newValue).build());
 
     }
@@ -120,9 +124,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.display"), new Byte [] {
                 0, 1, 2
         }, config.foodDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.food_points_only");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.food_and_saturation");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.food_points_only").formatted(ENABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.food_and_saturation").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.foodDisplay = newValue).build());
 
         // Food Status Effects
@@ -130,9 +134,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.food_status_effects"), new Byte [] {
                 0, 1, 2
         }, config.foodEffectDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects").formatted(ENABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
 
         // Potion Status Effects
@@ -140,9 +144,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.potion_status_effects"), new Byte [] {
                 0, 1, 2
         }, config.potionEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects").formatted(ENABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.potionEffectDisplay = newValue).build());
 
         // Suspicious Stew Status Effects
@@ -150,9 +154,9 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.suspicious_stew_status_effects"), new Byte [] {
                 0, 1, 2
         }, config.stewEffectDisplay).setDefaultValue((byte) 2).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects").formatted(ENABLED_FORMATTING);
+            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.stewEffectDisplay = newValue).build());
 
         // Show Modifiers
@@ -160,8 +164,8 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.modifiers"), new Byte [] {
                 0, 1
         }, config.modifierDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.modifierDisplay = newValue).build());
 
         // Other Effects
@@ -169,8 +173,8 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.other_effects"), new Byte [] {
                 0, 1
         }, config.otherEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.otherEffectDisplay = newValue).build());
     }
 
@@ -181,7 +185,7 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.other_items.axolotl_variants"), new Byte [] {
                 0, 1
         }, config.axolotlVariants).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.axolotlVariants = newValue).build());}
 }
