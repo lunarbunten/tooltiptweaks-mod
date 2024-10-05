@@ -7,6 +7,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,38 +28,41 @@ public class FoodTooltips {
     private static final Formatting FOOD_COLOR = Formatting.GOLD;
     private static final Formatting OTHER_COLOR = Formatting.BLUE;
 
+    private void addWhenConsumed(ItemStack stack, List<Text> lines, boolean whenFullyConsumed) {
+        lines.add(Text.literal(" "));
+        String append = whenFullyConsumed ? "when_fully_consumed" : "when_consumed";
+        lines.add(Text.translatable("tooltiptweaks.ui.food." + append).formatted(Formatting.GRAY));
+    }
+
+    private void addFoodPoints(ItemStack stack, List<Text> lines, int nutrition) {
+        lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.food", nutrition).formatted(FOOD_COLOR)));
+    }
+
+    private void addSaturation(ItemStack stack, List<Text> lines, float saturation) {
+        String formattedSaturation = new DecimalFormat("#.#").format(saturation);
+        lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", formattedSaturation).formatted(FOOD_COLOR)));
+    }
+
     private void addPrimaryTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
-
         if (stack.isOf(Items.CAKE) && config.foodDisplay <= 1) {
-
-            lines.add(Text.literal(" "));
-            lines.add(Text.translatable("tooltiptweaks.ui.food.when_fully_consumed").formatted(Formatting.GRAY));
-
-            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.food", 2 * 7).formatted(FOOD_COLOR)));
-
-            if (config.foodDisplay == 0)
-                lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", "2.8").formatted(FOOD_COLOR)));
+            addWhenConsumed(stack, lines, true);
+            addFoodPoints(stack, lines, 14);
+            if (config.foodDisplay == 0) addSaturation(stack, lines, 2.4F);
         }
 
         if (!stack.getComponents().contains(DataComponentTypes.FOOD)) return;
+
         FoodComponent food = stack.getComponents().get(DataComponentTypes.FOOD);
         if (food == null) return;
 
-        // When Consumed
-        if (config.foodDisplay <= 1 || (stack.isOf(Items.HONEY_BOTTLE)) && config.otherEffectDisplay < 1) {
-            lines.add(Text.literal(" "));
-            lines.add(Text.translatable("tooltiptweaks.ui.food.when_consumed").formatted(Formatting.GRAY));
-        }
+        if (config.foodDisplay <= 1 || (stack.isOf(Items.HONEY_BOTTLE)) && config.otherEffectDisplay < 1)
+            addWhenConsumed(stack, lines, false);
 
-        // Add Nourishment
         if (config.foodDisplay <= 1)
-            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.food", food.nutrition()).formatted(FOOD_COLOR)));
+            addFoodPoints(stack, lines, food.nutrition());
 
-        String formattedSaturation = new DecimalFormat("#.#").format(food.saturation());
-
-        // Add Saturation
         if (config.foodDisplay == 0)
-            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", formattedSaturation).formatted(FOOD_COLOR)));
+            addSaturation(stack, lines, food.saturation());
     }
 
     private void addFoodEffectTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
@@ -69,18 +73,17 @@ public class FoodTooltips {
         if (config.foodEffectDisplay < 2 || (config.foodEffectDisplay == 2 && type.isCreative())) {
             int i = 0;
             for (FoodComponent.StatusEffectEntry entry : food.effects()) {
-                var instance = entry.effect();
+                StatusEffectInstance instance = entry.effect();
+                StatusEffectCategory category = instance.getEffectType().value().getCategory();
+
                 MutableText mutableText = Text.translatable(instance.getTranslationKey());
 
-                if (instance.getAmplifier() > 0) {
+                if (instance.getAmplifier() > 0)
                     mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + instance.getAmplifier()));
-                }
 
-                if (instance.getDuration() > 20) {
+                if (instance.getDuration() > 20)
                     mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(instance, 1.0F, client.world.getTickManager().getTickRate()));
-                }
 
-                StatusEffectCategory category = instance.getEffectType().value().getCategory();
                 if (config.foodEffectDisplay == 0 || category != StatusEffectCategory.HARMFUL) {
                     if (!food.effects().isEmpty() && i == 0) {
                         lines.add(Text.translatable("tooltiptweaks.ui.food.effects").formatted(Formatting.GRAY));
@@ -101,18 +104,17 @@ public class FoodTooltips {
         if (config.stewEffectDisplay < 2 || (config.stewEffectDisplay == 2 && type.isCreative())) {
             int i = 0;
             for (SuspiciousStewEffectsComponent.StewEffect effect : stewEffects.effects()) {
-                var instance = effect.createStatusEffectInstance();
+                StatusEffectInstance instance = effect.createStatusEffectInstance();
+                StatusEffectCategory category = instance.getEffectType().value().getCategory();
+
                 MutableText mutableText = Text.translatable(instance.getTranslationKey());
 
-                if (instance.getAmplifier() > 0) {
+                if (instance.getAmplifier() > 0)
                     mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + instance.getAmplifier()));
-                }
 
-                if (instance.getDuration() > 20) {
+                if (instance.getDuration() > 20)
                     mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(instance, 1.0F, client.world.getTickManager().getTickRate()));
-                }
 
-                StatusEffectCategory category = instance.getEffectType().value().getCategory();
                 if (config.stewEffectDisplay == 0 || category != StatusEffectCategory.HARMFUL) {
                     if (!stewEffects.effects().isEmpty() && i == 0) {
                         lines.add(Text.translatable("tooltiptweaks.ui.food.effects").formatted(Formatting.GRAY));
@@ -138,8 +140,7 @@ public class FoodTooltips {
         // Add Milk Bucket Effects
         if (stack.isOf(Items.MILK_BUCKET)) {
             if (config.otherEffectDisplay < 1 || (config.otherEffectDisplay == 1 && type.isCreative())) {
-                lines.add(Text.literal(" "));
-                lines.add(Text.translatable("tooltiptweaks.ui.food.when_consumed").formatted(Formatting.GRAY));
+                addWhenConsumed(stack, lines, false);
                 lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.milk_bucket").formatted(OTHER_COLOR)));
             }
         }
