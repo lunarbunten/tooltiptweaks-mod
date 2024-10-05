@@ -19,8 +19,8 @@
     "tooltiptweaks.options.tools.shulker_box.display": "Shulker Box Display Style",
     "tooltiptweaks.options.tools.shulker_box.entries": "Amount of Shulker Box Lines",
 
-    "tooltiptweaks.options.value.all_info": "§a All Info",
-    "tooltiptweaks.options.value.hunger_only": "§aHunger Only",
+    "tooltiptweaks.options.value.food_and_saturation": "§aFood & Saturation",
+    "tooltiptweaks.options.value.food_points_only": "§aFood Points Only",
     "tooltiptweaks.options.value.effects.all": "§aAll Effects",
     "tooltiptweaks.options.value.effects.positive": "§aPositive Effects",
 
