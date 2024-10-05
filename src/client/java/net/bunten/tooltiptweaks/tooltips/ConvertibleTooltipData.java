@@ -1,4 +1,4 @@
-package net.bunten.tooltiptweaks.tooltips.data;
+package net.bunten.tooltiptweaks.tooltips;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -46,13 +46,22 @@ public class ConfigMenuScreen {
 
         // Clock Display Style
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.display"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.time_display"), new Byte [] {
                 0, 1, 2
         }, config.clockTimeDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.none").formatted(DISABLED_FORMATTING);
             case 1 -> Text.translatable("tooltiptweaks.options.value.12hour").formatted(ENABLED_FORMATTING);
             default -> Text.translatable("tooltiptweaks.options.value.24hour").formatted(ENABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.clockTimeDisplay = newValue).build());
+
+        // Moon Phase Display
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.moon_phase"), new Byte [] {
+                0, 1
+        }, config.clockMoonPhaseDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
+        }).setSaveConsumer((newValue)->config.clockMoonPhaseDisplay = newValue).build());
 
         // Compass Display Style
 
@@ -93,7 +102,7 @@ public class ConfigMenuScreen {
 
         // Display Style
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.durability.display"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.durability.display_style"), new Byte [] {
             0, 1, 2
         }, config.durabilityDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.none").formatted(DISABLED_FORMATTING);
@@ -104,7 +113,7 @@ public class ConfigMenuScreen {
         // Decimal Count
 
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.durability.decimal_count"), config.percentageDecimalCount, 0, 4).setDefaultValue(0).setSaveConsumer(newValue -> config.percentageDecimalCount = newValue).build());
-        
+
         // Display "Uses Left"
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.durability.uses_left"), new Byte [] {

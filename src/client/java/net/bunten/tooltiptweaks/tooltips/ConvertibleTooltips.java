@@ -1,8 +1,8 @@
-package net.bunten.tooltiptweaks.tooltips.text;
+package net.bunten.tooltiptweaks.tooltips;
 
 import net.bunten.tooltiptweaks.tooltips.gui.ContainerTooltipGUI;
-import net.bunten.tooltiptweaks.tooltips.data.ConvertibleTooltipData;
 import net.bunten.tooltiptweaks.tooltips.gui.FoodTooltipGUI;
+import net.bunten.tooltiptweaks.tooltips.gui.SpawnEggTooltipGUI;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.registry.Registry;
@@ -16,6 +16,7 @@ public class ConvertibleTooltips {
 
     public static final ConvertibleTooltipData CONTAINER = register("container", new ContainerTooltipGUI());
     public static final ConvertibleTooltipData FOOD = register("food", new FoodTooltipGUI());
+    public static final ConvertibleTooltipData SPAWN_EGG = register("spawn_egg", new SpawnEggTooltipGUI());
 
     private static ConvertibleTooltipData register(String name, ConvertibleTooltipData element) {
         return Registry.register(CONVERTIBLE_TOOLTIP_DATA_REGISTRY, id(name), element);

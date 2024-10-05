@@ -4,7 +4,7 @@ import com.google.common.reflect.Reflection;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.bunten.tooltiptweaks.tooltips.text.ConsumablesTooltips;
 import net.bunten.tooltiptweaks.tooltips.text.ContainerTooltips;
-import net.bunten.tooltiptweaks.tooltips.text.ConvertibleTooltips;
+import net.bunten.tooltiptweaks.tooltips.ConvertibleTooltips;
 import net.bunten.tooltiptweaks.tooltips.text.ToolTooltips;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;

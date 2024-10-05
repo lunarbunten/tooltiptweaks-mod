@@ -2,7 +2,7 @@ package net.bunten.tooltiptweaks.tooltips.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.tooltips.data.CustomTooltip;
+import net.bunten.tooltiptweaks.tooltips.CustomTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.component.DataComponentTypes;

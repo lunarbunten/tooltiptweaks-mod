@@ -1,4 +1,4 @@
-package net.bunten.tooltiptweaks.tooltips.data;
+package net.bunten.tooltiptweaks.tooltips;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;

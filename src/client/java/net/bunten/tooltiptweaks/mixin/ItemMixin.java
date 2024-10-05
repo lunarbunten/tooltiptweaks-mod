@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
-import static net.bunten.tooltiptweaks.tooltips.text.ConvertibleTooltips.CONVERTIBLE_TOOLTIP_DATA_REGISTRY;
+import static net.bunten.tooltiptweaks.tooltips.ConvertibleTooltips.CONVERTIBLE_TOOLTIP_DATA_REGISTRY;
 
 @Mixin(Item.class)
 public abstract class ItemMixin {

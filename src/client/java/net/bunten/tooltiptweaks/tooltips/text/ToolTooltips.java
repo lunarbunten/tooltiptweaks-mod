@@ -120,12 +120,17 @@ public class ToolTooltips {
 
     private void addClockTooltip(ItemStack stack, List<Text> lines) {
         @Nullable ClientWorld world = client.world;
-        if (!stack.isOf(Items.CLOCK) || config.clockTimeDisplay == 0 || world == null) return;
+        if (!stack.isOf(Items.CLOCK) || world == null) return;
 
-        MutableText text = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.unknown") : Text.literal(ClockUtil.getClockTime());
-        MutableText message = text.formatted(Formatting.GRAY);
+        if (config.clockTimeDisplay > 0) {
+            MutableText message = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.unknown") : ClockUtil.getClockTime();
+            lines.add(message.formatted(Formatting.GRAY));
+        }
 
-        if (message != null) lines.add(message);
+        if (config.clockMoonPhaseDisplay == 0) {
+            MutableText message = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.unknown") : Text.translatable("tooltiptweaks.ui.clock.moon_phase", Text.translatable("tooltiptweaks.ui.clock.moon_phase_" + world.getMoonPhase()));
+            lines.add(message.formatted(Formatting.GRAY));
+        }
     }
 
     private int roundedHorizontalDistance(BlockPos pos, BlockPos pos2) {
