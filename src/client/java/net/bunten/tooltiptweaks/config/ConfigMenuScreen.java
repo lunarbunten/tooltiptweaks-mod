@@ -21,7 +21,7 @@ public class ConfigMenuScreen {
 
         builder.setSavingRunnable(TooltipTweaksMod::saveSettings);
 
-        ConfigCategory general = builder.getOrCreateCategory(Text.literal("General").formatted(ENABLED_FORMATTING));
+        ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         SubCategoryBuilder tools = entryBuilder.startSubCategory(Text.translatable("tooltiptweaks.section.tools"));
