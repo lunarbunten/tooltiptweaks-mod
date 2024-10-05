@@ -1,6 +1,8 @@
 package net.bunten.tooltiptweaks.tooltip;
 
 import com.ibm.icu.text.DecimalFormat;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.bunten.tooltiptweaks.util.ClockUtil;
@@ -10,12 +12,17 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LodestoneTrackerComponent;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.passive.AxolotlEntity;
+import net.minecraft.entity.passive.TropicalFishEntity;
 import net.minecraft.item.CompassItem;
+import net.minecraft.item.EntityBucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
@@ -31,6 +38,24 @@ public class ToolTooltips {
 
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
+
+    public static record Variant(AxolotlEntity.Variant variant) {
+        public static final Codec<Variant> CODEC = Codec.INT.xmap(Variant::new, Variant::getId);
+
+        public Variant(int id) {
+            this(AxolotlEntity.Variant.byId(id));
+        }
+
+        public int getId() {
+            return variant.getId();
+        }
+
+        public String getName() {
+            return variant().getName();
+        }
+    }
+
+    private static final MapCodec<Variant> AXOLOTL_VARIANT_MAP_CODEC = Variant.CODEC.fieldOf("Variant");
 
     private DecimalFormat getDurabilityDecimalFormat() {
         String string = "#";
@@ -82,8 +107,8 @@ public class ToolTooltips {
     }
 
     private void addRepairCostTooltip(ItemStack stack, List<Text> lines) {
-        if (!stack.getComponents().contains(DataComponentTypes.REPAIR_COST)) return;
-        Integer repairCost = stack.getComponents().get(DataComponentTypes.REPAIR_COST);
+        if (!stack.contains(DataComponentTypes.REPAIR_COST)) return;
+        Integer repairCost = stack.get(DataComponentTypes.REPAIR_COST);
         if (repairCost < 1) return;
         MutableText message = Text.translatable("tooltiptweaks.ui.repair_cost", repairCost);
 
@@ -116,8 +141,8 @@ public class ToolTooltips {
 
         Optional<GlobalPos> target = Optional.empty();
 
-        if (stack.getComponents().contains(DataComponentTypes.LODESTONE_TRACKER)) {
-            LodestoneTrackerComponent component = stack.getComponents().get(DataComponentTypes.LODESTONE_TRACKER);
+        if (stack.contains(DataComponentTypes.LODESTONE_TRACKER)) {
+            LodestoneTrackerComponent component = stack.get(DataComponentTypes.LODESTONE_TRACKER);
             if (component != null) target = component.target();
         } else {
             if (stack.isOf(Items.COMPASS)) target = Optional.ofNullable(CompassItem.createSpawnPos(world));
@@ -130,27 +155,51 @@ public class ToolTooltips {
                 if (Screen.hasShiftDown()) {
                     if (config.compassDisplay == 0) {
                         int int_distance = roundedHorizontalDistance(player.getBlockPos(), pos);
-                        MutableText value = Text.translatable("tooltiptweaks.ui.compass.distance.value", int_distance, Text.translatable("tooltiptweaks.ui.compass.distance.append"));
+                        MutableText value = Text.translatable("tooltiptweaks.ui.distance.value", int_distance, Text.translatable("tooltiptweaks.ui.distance.append"));
                         MutableText unknown = Text.translatable("tooltiptweaks.ui.unknown");
 
-                        lines.add(Text.translatable("tooltiptweaks.ui.compass.distance", global.dimension() == world.getRegistryKey() ? value : unknown).formatted(Formatting.DARK_GREEN));
+                        lines.add(Text.translatable("tooltiptweaks.ui.distance", global.dimension() == world.getRegistryKey() ? value : unknown).formatted(Formatting.DARK_GREEN));
                     } else if (config.compassDisplay == 1) {
-                        MutableText position = Text.translatable("tooltiptweaks.ui.compass.position.coordinates", pos.getX(), pos.getY(), pos.getZ());
+                        MutableText position = Text.translatable("tooltiptweaks.ui.position.coordinates", pos.getX(), pos.getY(), pos.getZ());
                         MutableText unknown_position = Text.translatable("tooltiptweaks.ui.unknown");
 
-                        lines.add(Text.translatable("tooltiptweaks.ui.compass.position", global.dimension() == world.getRegistryKey() ? position : unknown_position).formatted(Formatting.DARK_GREEN));
+                        lines.add(Text.translatable("tooltiptweaks.ui.position", global.dimension() == world.getRegistryKey() ? position : unknown_position).formatted(Formatting.DARK_GREEN));
                     }
                 } else {
-                    lines.add(Text.translatable("tooltiptweaks.ui.compass.unshifted").formatted(Formatting.GRAY));
+                    lines.add(Text.translatable("tooltiptweaks.ui.unshifted").formatted(Formatting.GRAY));
                 }
             }
         });
     }
 
-    public void addTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
+    private void addAxolotlVariantTooltips(ItemStack stack, List<Text> lines) {
+        if (config.axolotlVariants == 1) return;
+
+        NbtComponent nbt = stack.getOrDefault(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT);
+        if (nbt.isEmpty()) return;
+
+        Optional<Variant> optional = nbt.get(AXOLOTL_VARIANT_MAP_CODEC).result();
+
+        optional.ifPresent((variant) -> {
+            Formatting[] formattings = new Formatting[]{Formatting.ITALIC, Formatting.GRAY};
+
+            MutableText text = Text.translatable("tooltiptweaks.ui.axolotl." + variant.getName());
+            MutableText message = text.formatted(Formatting.GRAY);
+
+            message.formatted(formattings);
+
+            lines.add(message);
+        });
+    }
+
+    public void addTooltips(ItemStack stack, List<Text> lines) {
         if (stack.isDamageable() && stack.isDamaged()) addDurabilityTooltip(stack, lines, stack.getMaxDamage(), stack.getDamage());
         addRepairCostTooltip(stack, lines);
         if (stack.isOf(Items.CLOCK) && config.clockTimeDisplay > 0) addClockTooltips(stack, lines);
         addCompassTooltips(stack, lines);
+        addAxolotlVariantTooltips(stack, lines);
+        
+
+
     }
 }

@@ -3,8 +3,8 @@ package net.bunten.tooltiptweaks;
 import com.google.gson.Gson;
 import net.bunten.tooltiptweaks.config.ConfigMenuScreen;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.tooltip.ConsumablesTooltips;
 import net.bunten.tooltiptweaks.tooltip.ContainerTooltips;
-import net.bunten.tooltiptweaks.tooltip.FoodTooltips;
 import net.bunten.tooltiptweaks.tooltip.ToolTooltips;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -48,9 +48,9 @@ public class TooltipTweaksMod implements ClientModInitializer {
         configMenu = new ConfigMenuScreen();
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
-            new ContainerTooltips().addTooltips(stack, type, lines);
-            new FoodTooltips().addTooltips(stack, type, lines);
-            new ToolTooltips().addTooltips(stack, type, lines);
+            new ConsumablesTooltips().addTooltips(stack, lines);
+            new ContainerTooltips().addTooltips(stack, lines);
+            new ToolTooltips().addTooltips(stack, lines);
         });
     }
 

@@ -80,13 +80,13 @@ public class ContainerTooltips {
         }
     }
 
-    public void addTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
+    public void addTooltips(ItemStack stack, List<Text> lines) {
         if (stack.contains(DataComponentTypes.CONTAINER_LOOT)) {
             lines.add(UNKNOWN_CONTENTS_TEXT);
         }
 
         var display = config.containerDisplay;
-        if (stack.getComponents().contains(DataComponentTypes.CONTAINER) && display < 2) {
+        if (stack.contains(DataComponentTypes.CONTAINER) && display < 2) {
             if (display == 0) {
                 addPerItemTooltips(stack, lines);
             } else if (display == 1) {

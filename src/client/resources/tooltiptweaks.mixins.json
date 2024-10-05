@@ -10,6 +10,7 @@
     "TooltipComponentMixin"
   ],
   "mixins": [
-    "ItemMixin"
+    "ItemMixin",
+    "SuspiciousStewItemMixin"
   ]
 }

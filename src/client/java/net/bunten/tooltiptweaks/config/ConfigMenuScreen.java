@@ -28,9 +28,13 @@ public class ConfigMenuScreen {
         addDurabilityOptions(entryBuilder, durability);
         general.addEntry(durability.build());
 
-        SubCategoryBuilder food = entryBuilder.startSubCategory(Text.translatable("tooltiptweaks.section.food"));
-        addFoodOptions(entryBuilder, food);
-        general.addEntry(food.build());
+        SubCategoryBuilder consumables = entryBuilder.startSubCategory(Text.translatable("tooltiptweaks.section.consumables"));
+        addConsumablesOptions(entryBuilder, consumables);
+        general.addEntry(consumables.build());
+
+        SubCategoryBuilder otherItems = entryBuilder.startSubCategory(Text.translatable("tooltiptweaks.section.other_items"));
+        addOtherItemOptions(entryBuilder, otherItems);
+        general.addEntry(otherItems.build());
         
         return builder.setTransparentBackground(true).build();
     }
@@ -71,6 +75,15 @@ public class ConfigMenuScreen {
         // Container Entry Count
 
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.container.entries"), config.containerEntries, 1, 27).setDefaultValue(6).setSaveConsumer(newValue -> config.containerEntries = newValue).build());
+
+        // Repair Cost Display
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.repair_cost"), new Byte [] {
+                0, 1
+        }, config.repairCostDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
+        }).setSaveConsumer((newValue)->config.repairCostDisplay = newValue).build());
     }
 
     private void addDurabilityOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
@@ -80,7 +93,7 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.durability.display"), new Byte [] {
             0, 1, 2
         }, config.durabilityDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.vanilla");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.none");
             case 1 -> Text.translatable("tooltiptweaks.options.value.percentage");
             default -> Text.translatable("tooltiptweaks.options.value.fraction");
         }).setSaveConsumer((newValue)->config.durabilityDisplay = newValue).build());
@@ -98,22 +111,13 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.yes");
         }).setSaveConsumer((newValue)->config.displayUsesLeft = newValue).build());
 
-        // Repair Cost Display
-
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.repair_cost"), new Byte [] {
-                0, 1
-        }, config.repairCostDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
-            default -> Text.translatable("tooltiptweaks.options.value.no");
-        }).setSaveConsumer((newValue)->config.repairCostDisplay = newValue).build());
-
     }
 
-    private void addFoodOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
+    private void addConsumablesOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
 
         // Food Nourishment
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.display"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.display"), new Byte [] {
                 0, 1, 2
         }, config.foodDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.food_points_only");
@@ -123,31 +127,51 @@ public class ConfigMenuScreen {
 
         // Food Status Effects
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.effects"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.effects"), new Byte [] {
                 0, 1, 2
         }, config.foodEffectDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.effects.all");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.effects.positive");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
+            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
 
         // Suspicious Stew Status Effects
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.stew_effects"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.stew_effects"), new Byte [] {
                 0, 1, 2
         }, config.stewEffectDisplay).setDefaultValue((byte) 2).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.effects.all");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.effects.positive");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
+            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.stewEffectDisplay = newValue).build());
 
+        // Show Modifiers
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.modifiers"), new Byte [] {
+                0, 1
+        }, config.modifierDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
+        }).setSaveConsumer((newValue)->config.modifierDisplay = newValue).build());
+
         // Other Effects
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.other_effects"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.other_effects"), new Byte [] {
                 0, 1
         }, config.otherEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.effects.all");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.otherEffectDisplay = newValue).build());
     }
+
+    private void addOtherItemOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
+
+        // Axolotl Variants
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.other_items.axolotl_variants"), new Byte [] {
+                0, 1
+        }, config.axolotlVariants).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
+        }).setSaveConsumer((newValue)->config.axolotlVariants = newValue).build());}
 }
