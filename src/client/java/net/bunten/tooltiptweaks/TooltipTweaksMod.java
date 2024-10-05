@@ -8,6 +8,8 @@ import net.bunten.tooltiptweaks.tooltip.FoodTooltips;
 import net.bunten.tooltiptweaks.tooltip.ToolTooltips;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -31,6 +33,13 @@ public class TooltipTweaksMod implements ClientModInitializer {
 
     public static String getConfigPath() {
         return "./config/" + MOD_ID + ".json";
+    }
+
+    public static boolean creative() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        ClientPlayerEntity player = client.player;
+        if (player == null) return false;
+        return player.getAbilities().creativeMode;
     }
     
     @Override

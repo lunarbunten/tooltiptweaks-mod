@@ -25,6 +25,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static net.bunten.tooltiptweaks.TooltipTweaksMod.creative;
+
 public class ToolTooltips {
 
     private final MinecraftClient client = MinecraftClient.getInstance();
@@ -65,10 +67,30 @@ public class ToolTooltips {
                 break;
         }
 
-        if ((config.toolUsesLeft == 2 ? percent <= config.lowDurabilityThreshold : config.toolUsesLeft > 0) && percent > 0) {
+        if (config.displayUsesLeft == 1 && percent <= 25) {
             message = Text.translatable("tooltiptweaks.ui.uses_left", new DecimalFormat("#").format(durability));
             lines.add(message.setStyle(message.getStyle().withColor(getDurabilityTextColor(max, damage))));
         }
+    }
+
+    private int getRepairCostTextColor(int repairCost) {
+        float max = 36;
+        float damage = Math.min(repairCost, max);
+
+        float f = Math.max(0, (max - damage) / max);
+        return MathHelper.hsvToRgb(f / 3, 1, 1);
+    }
+
+    private void addRepairCostTooltip(ItemStack stack, List<Text> lines) {
+        if (!stack.getComponents().contains(DataComponentTypes.REPAIR_COST)) return;
+        Integer repairCost = stack.getComponents().get(DataComponentTypes.REPAIR_COST);
+        if (repairCost < 1) return;
+        MutableText message = Text.translatable("tooltiptweaks.ui.repair_cost", repairCost);
+
+        if (!creative() && repairCost + 1 >= 40)
+            message = Text.translatable("tooltiptweaks.ui.cannot_repair");
+
+        lines.add(message.setStyle(message.getStyle().withColor(getRepairCostTextColor(repairCost))));
     }
 
     private void addClockTooltips(ItemStack stack, List<Text> lines) {
@@ -127,6 +149,7 @@ public class ToolTooltips {
 
     public void addTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
         if (stack.isDamageable() && stack.isDamaged()) addDurabilityTooltip(stack, lines, stack.getMaxDamage(), stack.getDamage());
+        addRepairCostTooltip(stack, lines);
         if (stack.isOf(Items.CLOCK) && config.clockTimeDisplay > 0) addClockTooltips(stack, lines);
         addCompassTooltips(stack, lines);
     }
