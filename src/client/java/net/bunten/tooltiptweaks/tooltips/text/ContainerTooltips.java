@@ -1,12 +1,11 @@
-package net.bunten.tooltiptweaks.tooltip;
+package net.bunten.tooltiptweaks.tooltips.text;
 
-import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.collection.DefaultedList;
@@ -21,7 +20,8 @@ public class ContainerTooltips {
     private final DefaultedList<ItemStack> INVENTORY = DefaultedList.ofSize(27, ItemStack.EMPTY);
     private final LinkedHashMap<Item, Integer> ITEM_COUNT_MAP = new LinkedHashMap<Item, Integer>();
 
-    private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
+    private final MinecraftClient client = MinecraftClient.getInstance();
+    private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
 
     private void addPerItemTooltips(ItemStack stack, List<Text> lines) {
 

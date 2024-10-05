@@ -1,18 +1,28 @@
-package net.bunten.tooltiptweaks.tooltip.component;
+package net.bunten.tooltiptweaks.tooltips.gui;
 
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
+import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.tooltips.data.CustomTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 public class ContainerInventoryTooltip extends CustomTooltip {
-    private final ContainerComponent component;
+    private ContainerComponent component;
 
-    public ContainerInventoryTooltip(ContainerComponent component) {
-        this.component = component;
+    @Override
+    public CustomTooltip withStack(ItemStack stack) {
+        component = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
+        return this;
+    }
+
+    @Override
+    public boolean canDisplay(ItemStack stack) {
+        return stack.getComponents().contains(DataComponentTypes.CONTAINER) && TooltipTweaksConfig.getInstance().containerDisplay == 2;
     }
 
     private boolean isEmpty() {

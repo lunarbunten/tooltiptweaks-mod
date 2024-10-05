@@ -5,15 +5,12 @@ import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.minecraft.client.MinecraftClient;
 
 public class ClockUtil {
-
-    private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
     
     public static String getClockTime() {
-        boolean twelveHour = config.clockTimeDisplay == 1;
+        boolean twelveHour = TooltipTweaksConfig.getInstance().clockTimeDisplay == 1;
 
-        var world = client.world;
-        
+        var world = MinecraftClient.getInstance().world;
+
         long time = world.getTimeOfDay();
 
         int actualHour = (int) ((time / 1000L + 6L) % 24L);

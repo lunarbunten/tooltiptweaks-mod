@@ -4,14 +4,13 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
-import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class ConfigMenuScreen {
     
-    TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
+    TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
     
     private static final Formatting ENABLED_FORMATTING = Formatting.GREEN;
     private static final Formatting DISABLED_FORMATTING = Formatting.WHITE;
@@ -19,7 +18,7 @@ public class ConfigMenuScreen {
     public Screen getConfigScreen(Screen parent, boolean isTransparent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(Text.translatable("tooltiptweaks.menu.options"));
 
-        builder.setSavingRunnable(TooltipTweaksMod::saveSettings);
+        builder.setSavingRunnable(TooltipTweaksConfig::saveSettings);
 
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();

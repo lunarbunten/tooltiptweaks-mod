@@ -1,7 +1,6 @@
-package net.bunten.tooltiptweaks.tooltip;
+package net.bunten.tooltiptweaks.tooltips.text;
 
 import com.mojang.datafixers.util.Pair;
-import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentType;
@@ -16,7 +15,6 @@ import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.OminousBottleItem;
 import net.minecraft.item.PotionItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
@@ -32,8 +30,7 @@ import static net.bunten.tooltiptweaks.TooltipTweaksMod.creative;
 public class ConsumablesTooltips {
 
     private final MinecraftClient client = MinecraftClient.getInstance();
-
-    private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
+    private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
 
     private static final Formatting NUTRITION_COLOR = Formatting.GOLD;
 

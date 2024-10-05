@@ -1,9 +1,8 @@
-package net.bunten.tooltiptweaks.tooltip;
+package net.bunten.tooltiptweaks.tooltips.text;
 
 import com.ibm.icu.text.DecimalFormat;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.bunten.tooltiptweaks.util.ClockUtil;
 import net.minecraft.client.MinecraftClient;
@@ -14,15 +13,11 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LodestoneTrackerComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.passive.AxolotlEntity;
-import net.minecraft.entity.passive.TropicalFishEntity;
 import net.minecraft.item.CompassItem;
-import net.minecraft.item.EntityBucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
@@ -37,9 +32,9 @@ import static net.bunten.tooltiptweaks.TooltipTweaksMod.creative;
 public class ToolTooltips {
 
     private final MinecraftClient client = MinecraftClient.getInstance();
-    private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
+    private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
 
-    public static record Variant(AxolotlEntity.Variant variant) {
+    public record Variant(AxolotlEntity.Variant variant) {
         public static final Codec<Variant> CODEC = Codec.INT.xmap(Variant::new, Variant::getId);
 
         public Variant(int id) {

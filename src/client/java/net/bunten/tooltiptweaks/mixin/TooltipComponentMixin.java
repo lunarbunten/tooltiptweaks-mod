@@ -1,6 +1,6 @@
 package net.bunten.tooltiptweaks.mixin;
 
-import net.bunten.tooltiptweaks.tooltip.component.ConvertibleTooltipData;
+import net.bunten.tooltiptweaks.tooltips.data.ConvertibleTooltipData;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.tooltip.TooltipData;
 import org.spongepowered.asm.mixin.Mixin;
