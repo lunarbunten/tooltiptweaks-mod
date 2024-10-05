@@ -47,7 +47,7 @@ public class FoodTooltips {
         if (stack.isOf(Items.CAKE) && config.foodDisplay <= 1) {
             addWhenConsumed(stack, lines, true);
             addFoodPoints(stack, lines, 14);
-            if (config.foodDisplay == 0) addSaturation(stack, lines, 2.4F);
+            if (config.foodDisplay == 1) addSaturation(stack, lines, 2.4F);
         }
 
         if (!stack.getComponents().contains(DataComponentTypes.FOOD)) return;
@@ -61,7 +61,7 @@ public class FoodTooltips {
         if (config.foodDisplay <= 1)
             addFoodPoints(stack, lines, food.nutrition());
 
-        if (config.foodDisplay == 0)
+        if (config.foodDisplay == 1)
             addSaturation(stack, lines, food.saturation());
     }
 

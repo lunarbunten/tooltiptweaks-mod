@@ -63,9 +63,9 @@ public class ConfigMenuScreen {
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.display"), new Byte [] {
                 0, 1, 2
-        }, config.foodDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.food_and_saturation");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.food_points_only");
+        }, config.foodDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.food_points_only");
+            case 1 -> Text.translatable("tooltiptweaks.options.value.food_and_saturation");
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodDisplay = newValue).build());
 
