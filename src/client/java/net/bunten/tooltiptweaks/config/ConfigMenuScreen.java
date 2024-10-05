@@ -139,11 +139,11 @@ public class ConfigMenuScreen {
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.potion_status_effects"), new Byte [] {
                 0, 1, 2
-        }, config.foodEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+        }, config.potionEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
             case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
             default -> Text.translatable("tooltiptweaks.options.value.no");
-        }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
+        }).setSaveConsumer((newValue)->config.potionEffectDisplay = newValue).build());
 
         // Suspicious Stew Status Effects
 
