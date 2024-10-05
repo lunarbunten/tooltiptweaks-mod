@@ -7,12 +7,10 @@ public class TooltipTweaksConfig {
     public byte toolUsesLeft = 0;
     public int lowDurabilityThreshold = 25;
 
-    public boolean showHungerRestoration = true;
-    public boolean showSaturationRestoration = false;
-    public boolean showFoodStatusEffects = true;
-    public boolean hideNegativeFoodEffects = true;
-    public boolean hideStewEffects = false;
-    public boolean hideNegativeStewEffects = false;
+    public byte foodDisplay = 1;
+    public byte foodEffectDisplay = 0;
+    public byte stewEffectDisplay = 0;
+    public byte otherEffectDisplay = 0;
 
     public byte clockTimeDisplay = 1;
     public boolean lodestoneCompassDisplay = false;

@@ -40,10 +40,10 @@ public class TooltipTweaksMod implements ClientModInitializer {
         configMenu = new ConfigMenuScreen();
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
-            new ContainerTooltips().addTooltips(stack, context, type, lines);
-            new DurabilityTooltips().addTooltips(stack, context, type, lines);
-            new FoodTooltips().addTooltips(stack, context, type, lines);
-            new ToolTooltips().addTooltips(stack, context, type, lines);
+            new ContainerTooltips().addTooltips(stack, type, lines);
+            new DurabilityTooltips().addTooltips(stack, type, lines);
+            new FoodTooltips().addTooltips(stack, type, lines);
+            new ToolTooltips().addTooltips(stack, type, lines);
         });
     }
 

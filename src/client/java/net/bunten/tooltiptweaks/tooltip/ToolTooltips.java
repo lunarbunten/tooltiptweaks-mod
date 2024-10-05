@@ -52,7 +52,7 @@ public class ToolTooltips {
         }
     }
 
-    public void addTooltips(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
+    public void addTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
         @Nullable var world = client.world;
         
         if (world != null) {

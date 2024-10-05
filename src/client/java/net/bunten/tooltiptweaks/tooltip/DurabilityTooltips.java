@@ -57,7 +57,7 @@ public class DurabilityTooltips {
         }
     }
     
-    public void addTooltips(ItemStack stack, Item.TooltipContext context, TooltipType type, List<Text> lines) {
+    public void addTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
         float max = stack.getMaxDamage();
         float damage = stack.getDamage();
 
