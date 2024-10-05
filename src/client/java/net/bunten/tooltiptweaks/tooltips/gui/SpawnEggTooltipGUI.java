@@ -1,7 +1,7 @@
 package net.bunten.tooltiptweaks.tooltips.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.bunten.tooltiptweaks.tooltips.CustomTooltip;
+import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.component.DataComponentTypes;
@@ -17,14 +17,14 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-public class SpawnEggTooltipGUI extends CustomTooltip {
+public class SpawnEggTooltipGUI extends AbstractTooltip {
     private ItemStack stack;
 
     @Nullable
     private Item item;
 
     @Override
-    public CustomTooltip withStack(ItemStack stack) {
+    public AbstractTooltip withStack(ItemStack stack) {
         this.stack = stack;
         return this;
     }

@@ -2,7 +2,7 @@ package net.bunten.tooltiptweaks.tooltips.gui;
 
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.tooltips.CustomTooltip;
+import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.component.DataComponentTypes;
@@ -11,11 +11,11 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class ContainerTooltipGUI extends CustomTooltip {
+public class ContainerTooltipGUI extends AbstractTooltip {
     private ContainerComponent component;
 
     @Override
-    public CustomTooltip withStack(ItemStack stack) {
+    public AbstractTooltip withStack(ItemStack stack) {
         component = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
         return this;
     }

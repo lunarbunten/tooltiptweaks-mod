@@ -2,7 +2,7 @@ package net.bunten.tooltiptweaks.tooltips.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.tooltips.CustomTooltip;
+import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.component.DataComponentTypes;
@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class FoodTooltipGUI extends CustomTooltip {
+public class FoodTooltipGUI extends AbstractTooltip {
     private ItemStack stack;
     private FoodComponent component;
 
@@ -19,7 +19,7 @@ public class FoodTooltipGUI extends CustomTooltip {
     private static final Identifier FOOD_FULL_TEXTURE = Identifier.ofVanilla("hud/food_full");
 
     @Override
-    public CustomTooltip withStack(ItemStack stack) {
+    public AbstractTooltip withStack(ItemStack stack) {
         this.stack = stack;
         this.component = stack.get(DataComponentTypes.FOOD);
         return this;
