@@ -98,7 +98,7 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.display"), new Byte [] {
             0, 1, 2
         }, config.clockTimeDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.vanilla");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.none");
             case 1 -> Text.translatable("tooltiptweaks.options.value.12hour");
             default -> Text.translatable("tooltiptweaks.options.value.24hour");
         }).setSaveConsumer((newValue)->config.clockTimeDisplay = newValue).build());
