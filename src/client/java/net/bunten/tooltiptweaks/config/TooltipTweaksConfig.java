@@ -12,13 +12,18 @@ import static net.bunten.tooltiptweaks.TooltipTweaksMod.MOD_ID;
 public class TooltipTweaksConfig {
 
     private static TooltipTweaksConfig config;
-
-    private static String getConfigPath() {
-        return "./config/" + MOD_ID + ".json";
-    }
+    private static ConfigMenuScreen menu;
 
     public static TooltipTweaksConfig getInstance() {
         return config;
+    }
+
+    public static ConfigMenuScreen getMenu() {
+        return menu;
+    }
+
+    private static String getConfigPath() {
+        return "./config/" + MOD_ID + ".json";
     }
 
     public static void loadSettings() {
@@ -52,6 +57,8 @@ public class TooltipTweaksConfig {
 
     static {
         loadSettings();
+        
+        menu = new ConfigMenuScreen();
     }
 
     public byte clockTimeDisplay = 1;

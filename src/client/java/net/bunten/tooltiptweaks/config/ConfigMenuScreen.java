@@ -15,7 +15,7 @@ public class ConfigMenuScreen {
     private static final Formatting ENABLED_FORMATTING = Formatting.GREEN;
     private static final Formatting DISABLED_FORMATTING = Formatting.WHITE;
 
-    public Screen getConfigScreen(Screen parent, boolean isTransparent) {
+    public Screen build(Screen parent, boolean isTransparent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(Text.translatable("tooltiptweaks.menu.options"));
 
         builder.setSavingRunnable(TooltipTweaksConfig::saveSettings);

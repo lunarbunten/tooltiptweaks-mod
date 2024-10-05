@@ -1,7 +1,6 @@
 package net.bunten.tooltiptweaks;
 
 import com.google.common.reflect.Reflection;
-import net.bunten.tooltiptweaks.config.ConfigMenuScreen;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.bunten.tooltiptweaks.tooltips.text.ConsumablesTooltips;
 import net.bunten.tooltiptweaks.tooltips.text.ContainerTooltips;
@@ -16,8 +15,6 @@ import net.minecraft.util.Identifier;
 public class TooltipTweaksMod implements ClientModInitializer {
     public static final String MOD_ID = "tooltiptweaks";
 
-    public static ConfigMenuScreen configMenu;
-
     public static Identifier id(String path) {
         return Identifier.of(MOD_ID, path);
     }
@@ -31,8 +28,6 @@ public class TooltipTweaksMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        configMenu = new ConfigMenuScreen();
-
         Reflection.initialize(TooltipTweaksConfig.class, ConvertibleTooltips.class);
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
