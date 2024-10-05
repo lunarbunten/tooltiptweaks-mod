@@ -118,15 +118,24 @@ public class ConfigMenuScreen {
 
     private void addConsumablesOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
 
+        // Food Display Style
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.food_display_style"), new Byte [] {
+                0, 1
+        }, config.foodDisplayStyle).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.text").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.icons").formatted(ENABLED_FORMATTING);
+        }).setSaveConsumer((newValue)->config.foodDisplayStyle = newValue).build());
+
         // Food Nourishment
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.display"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.food_nourishment"), new Byte [] {
                 0, 1, 2
-        }, config.foodDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+        }, config.foodNourishmentDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.food_points_only").formatted(ENABLED_FORMATTING);
             case 1 -> Text.translatable("tooltiptweaks.options.value.food_and_saturation").formatted(ENABLED_FORMATTING);
             default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
-        }).setSaveConsumer((newValue)->config.foodDisplay = newValue).build());
+        }).setSaveConsumer((newValue)->config.foodNourishmentDisplay = newValue).build());
 
         // Food Status Effects
 

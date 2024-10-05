@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class ContainerInventoryTooltip extends CustomTooltip {
+public class ContainerTooltipGUI extends CustomTooltip {
     private ContainerComponent component;
 
     @Override

@@ -57,7 +57,7 @@ public class TooltipTweaksConfig {
 
     static {
         loadSettings();
-        
+
         menu = new ConfigMenuScreen();
     }
 
@@ -71,7 +71,8 @@ public class TooltipTweaksConfig {
     public byte displayUsesLeft = 0;
     public byte repairCostDisplay = 0;
 
-    public byte foodDisplay = 0;
+    public byte foodDisplayStyle = 0;
+    public byte foodNourishmentDisplay = 0;
     public byte foodEffectDisplay = 1;
     public byte potionEffectDisplay = 0;
     public byte stewEffectDisplay = 2;

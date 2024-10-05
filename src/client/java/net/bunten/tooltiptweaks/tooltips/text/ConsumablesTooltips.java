@@ -62,29 +62,30 @@ public class ConsumablesTooltips {
     }
 
     private void addNutritionInfo(ItemStack stack, List<Text> lines) {
-        if (stack.isOf(Items.CAKE) && config.foodDisplay <= 1) {
+        if (stack.isOf(Items.CAKE) && config.foodNourishmentDisplay <= 1) {
             addWhenConsumed(stack, lines, true);
             addFoodPoints(stack, lines, 14);
-            if (config.foodDisplay == 1) addSaturation(stack, lines, 2.4F);
+            if (config.foodNourishmentDisplay == 1) addSaturation(stack, lines, 2.4F);
         }
 
         if (stack.contains(DataComponentTypes.FOOD)) {
             FoodComponent food = stack.get(DataComponentTypes.FOOD);
             if (food == null) return;
 
-            if (config.foodDisplay <= 1 || (stack.isOf(Items.HONEY_BOTTLE)) && config.otherEffectDisplay < 1)
+            if (config.foodNourishmentDisplay <= 1)
                 addWhenConsumed(stack, lines, false);
 
-            if (config.foodDisplay <= 1)
+            if (config.foodNourishmentDisplay <= 1)
                 addFoodPoints(stack, lines, food.nutrition());
 
-            if (config.foodDisplay == 1)
+            if (config.foodNourishmentDisplay == 1)
                 addSaturation(stack, lines, food.saturation());
         }
     }
 
     private void addEffects(ItemStack stack, List<Text> lines, List<StatusEffectInstance> effects, int displayConfig) {
         if (effects.isEmpty()) return;
+        if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
 
         int i = 0;
         float durationMultiplier = stack.isOf(Items.LINGERING_POTION) ? 0.25F : 1.0F;
@@ -101,18 +102,11 @@ public class ConsumablesTooltips {
 
             if (displayConfig == 0 || category != StatusEffectCategory.HARMFUL || creative()) {
                 if (i == 0) lines.add(STATUS_EFFECTS_HEADER);
-                Formatting formatting;
-                switch (category) {
-                    case BENEFICIAL:
-                        formatting = BENEFICIAL_STATUS_EFFECT_COLOR;
-                        break;
-                    case NEUTRAL:
-                        formatting = NEUTRAL_STATUS_EFFECT_COLOR;
-                        break;
-                    default:
-                        formatting = HARMFUL_STATUS_EFFECT_COLOR;
-                        break;
-                }
+                Formatting formatting = switch (category) {
+                    case BENEFICIAL -> BENEFICIAL_STATUS_EFFECT_COLOR;
+                    case NEUTRAL -> NEUTRAL_STATUS_EFFECT_COLOR;
+                    default -> HARMFUL_STATUS_EFFECT_COLOR;
+                };
                 lines.add(Text.literal(" ").append(mutableText.formatted(formatting)));
                 i++;
             }
@@ -124,6 +118,7 @@ public class ConsumablesTooltips {
         getStatusEffects(stack, component).forEach((instance) -> instance.getEffectType().value().forEachAttributeModifier(instance.getAmplifier(), (attribute, modifier) -> modifiers.add(new Pair<>(attribute, modifier))));
 
         if (modifiers.isEmpty()) return;
+        if (!lines.contains(WHEN_CONSUMED_HEADER) && !lines.contains(STATUS_EFFECTS_HEADER)) lines.add(Text.literal(" "));
 
         lines.add(MODIFIERS_HEADER);
 
@@ -152,28 +147,28 @@ public class ConsumablesTooltips {
     }
 
     private void addConsumableTooltips(ItemStack stack, List<Text> lines) {
-        ComponentType<?> component = DataComponentTypes.FOOD;
+        if (!stack.isOf(Items.OMINOUS_BOTTLE) && config.foodDisplayStyle == 0) addNutritionInfo(stack, lines);
+
+        ComponentType<?> effectComponent = DataComponentTypes.FOOD;
 
         byte displayConfig = config.foodEffectDisplay;
         if (stack.isOf(Items.SUSPICIOUS_STEW)) {
-            component = DataComponentTypes.SUSPICIOUS_STEW_EFFECTS;
+            effectComponent = DataComponentTypes.SUSPICIOUS_STEW_EFFECTS;
             displayConfig = config.stewEffectDisplay;
         }
         if (stack.getItem() instanceof PotionItem) {
-            component = DataComponentTypes.POTION_CONTENTS;
+            effectComponent = DataComponentTypes.POTION_CONTENTS;
             displayConfig = config.potionEffectDisplay;
         }
         if (stack.isOf(Items.OMINOUS_BOTTLE)) {
-            component = DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER;
+            effectComponent = DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER;
             displayConfig = config.potionEffectDisplay;
         }
 
-        if (!stack.contains(component)) return;
+        if (!stack.contains(effectComponent)) return;
 
-        if (!stack.isOf(Items.OMINOUS_BOTTLE)) addNutritionInfo(stack, lines);
-
-        if (displayConfig < 2 || creative()) addEffects(stack, lines, getStatusEffects(stack, component), displayConfig);
-        if (config.modifierDisplay == 0 || creative()) addModifiers(stack, lines, component);
+        if (displayConfig < 2 || creative()) addEffects(stack, lines, getStatusEffects(stack, effectComponent), displayConfig);
+        if (config.modifierDisplay == 0 || creative()) addModifiers(stack, lines, effectComponent);
     }
 
     public void register(ItemStack stack, List<Text> lines) {
@@ -181,13 +176,14 @@ public class ConsumablesTooltips {
 
         // Add Honey Bottle Effects
         if (stack.isOf(Items.HONEY_BOTTLE) && (config.otherEffectDisplay < 1 || (config.otherEffectDisplay == 1 && creative()))) {
+            if (!lines.contains(WHEN_CONSUMED_HEADER)) addWhenConsumed(stack, lines, false);
             lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.honey_bottle_effect").formatted(NUTRITION_COLOR)));
         }
 
         // Add Milk Bucket Effects
         if (stack.isOf(Items.MILK_BUCKET)) {
             if (config.otherEffectDisplay < 1 || (config.otherEffectDisplay == 1 && creative())) {
-                addWhenConsumed(stack, lines, false);
+                if (!lines.contains(WHEN_CONSUMED_HEADER)) addWhenConsumed(stack, lines, false);
                 lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.milk_bucket_effect").formatted(NUTRITION_COLOR)));
             }
         }
