@@ -75,7 +75,7 @@
     "tooltiptweaks.ui.position.coordinates": "%s, %s, %s",
     "tooltiptweaks.ui.unshifted": "Press SHIFT for information...",
     "tooltiptweaks.ui.container.entry": " x%s",
-    "tooltiptweaks.ui.clock.moon_phase_": "Modifiers:",
+    "tooltiptweaks.ui.modifiers": "Modifiers:",
     "tooltiptweaks.ui.container.more": "and %s more...",
     "tooltiptweaks.ui.durability": "§7Durability: %s",
     "tooltiptweaks.ui.repair_cost": "§7Repair Cost: %s",

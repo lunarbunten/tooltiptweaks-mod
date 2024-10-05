@@ -2,10 +2,8 @@ package net.bunten.tooltiptweaks;
 
 import com.google.common.reflect.Reflection;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.tooltips.text.ConsumablesTooltips;
-import net.bunten.tooltiptweaks.tooltips.text.ContainerTooltips;
+import net.bunten.tooltiptweaks.tooltips.text.*;
 import net.bunten.tooltiptweaks.tooltips.ConvertibleTooltips;
-import net.bunten.tooltiptweaks.tooltips.text.ToolTooltips;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.MinecraftClient;
@@ -31,9 +29,13 @@ public class TooltipTweaksMod implements ClientModInitializer {
         Reflection.initialize(TooltipTweaksConfig.class, ConvertibleTooltips.class);
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
+            new AxolotlVariantTooltip().register(stack, lines);
+            new ClockTooltips().register(stack, lines);
+            new CompassTooltips().register(stack, lines);
             new ConsumablesTooltips().register(stack, lines);
             new ContainerTooltips().register(stack, lines);
-            new ToolTooltips().register(stack, lines);
+            new DurabilityTooltips().register(stack, lines);
+            new RepairCostTooltip().register(stack, lines);
         });
     }
 }
