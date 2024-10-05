@@ -4,7 +4,6 @@ import com.ibm.icu.text.DecimalFormat;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.util.ClockUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -118,12 +117,29 @@ public class ToolTooltips {
         lines.add(message.setStyle(message.getStyle().withColor(getRepairCostTextColor(repairCost))));
     }
 
+    public static MutableText getClockTime() {
+        boolean twelveHour = TooltipTweaksConfig.getInstance().clockTimeDisplay == 1;
+        long time = MinecraftClient.getInstance().world.getTimeOfDay();
+
+        int hour = (int) ((time / 1000L + 6L) % 24L);
+        int minute = (int) (60L * (time % 1000L) / 1000L);
+
+        int displayedHour = twelveHour ? (hour % 12 == 0 ? 12 : hour % 12) : hour;
+
+        String hourDisplay = String.format("%02d", displayedHour);
+        String minuteDisplay = String.format("%02d", minute);
+
+        MutableText suffix = twelveHour ? Text.translatable("tooltiptweaks.ui.clock." + (hour >= 12 ? "pm" : "am")) : Text.literal("");
+
+        return Text.translatable("tooltiptweaks.ui.clock.time", hourDisplay, minuteDisplay, suffix);
+    }
+
     private void addClockTooltip(ItemStack stack, List<Text> lines) {
         @Nullable ClientWorld world = client.world;
         if (!stack.isOf(Items.CLOCK) || world == null) return;
 
         if (config.clockTimeDisplay > 0) {
-            MutableText message = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.unknown") : ClockUtil.getClockTime();
+            MutableText message = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.unknown") : getClockTime();
             lines.add(message.formatted(Formatting.GRAY));
         }
 
