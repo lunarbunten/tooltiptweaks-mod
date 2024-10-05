@@ -4,7 +4,11 @@
     
     "tooltiptweaks.menu.options": "Tooltip Tweaks Configuration",
 
-    "tooltiptweaks.options.durability.display": "Display Durability",
+    "tooltiptweaks.section.durability": "Durability",
+    "tooltiptweaks.section.food": "Food & Drinks",
+    "tooltiptweaks.section.tools": "Etc",
+
+    "tooltiptweaks.options.durability.display": "Durability Display Style",
     "tooltiptweaks.options.durability.percentage.decimals": "Percentage Decimal Count",
     "tooltiptweaks.options.durability.remaininguses": "Display \"Uses Left\"",
     "tooltiptweaks.options.durability.remaininguses.threshold": "Durability Threshold for Uses Left",
@@ -16,8 +20,8 @@
 
     "tooltiptweaks.options.tools.clock.display": "Clock Time Display Style",
     "tooltiptweaks.options.tools.compass.lodestone": "Display \"SHIFT for coordinates\" for Lodestone Compass",
-    "tooltiptweaks.options.tools.shulker_box.display": "Shulker Box Display Style",
-    "tooltiptweaks.options.tools.shulker_box.entries": "Amount of Shulker Box Lines",
+    "tooltiptweaks.options.tools.container.display": "Container (Shulker Box) Display Style",
+    "tooltiptweaks.options.tools.container.entries": "Amount of Container Lines",
 
     "tooltiptweaks.options.value.food_and_saturation": "§aFood & Saturation",
     "tooltiptweaks.options.value.food_points_only": "§aFood Points Only",
@@ -29,20 +33,17 @@
     "tooltiptweaks.options.value.advanced_tooltips": "§eAdvanced Only",
     "tooltiptweaks.options.value.fraction": "§aFraction",
     "tooltiptweaks.options.value.low_durability": "§eLow Durability",
-    "tooltiptweaks.options.value.no": "§cNo",
-    "tooltiptweaks.options.value.none": "§cNone",
+    "tooltiptweaks.options.value.no": "No",
+    "tooltiptweaks.options.value.vanilla": "Vanilla",
+    "tooltiptweaks.options.value.none": "None",
     "tooltiptweaks.options.value.yes": "§aYes",
     "tooltiptweaks.options.value.percentage": "§aPercentage",
-    "tooltiptweaks.options.value.shulker_box.vanilla": "§aVanilla (per Stack)",
-    "tooltiptweaks.options.value.shulker_box.enhanced": "§aEnhanced (per Item)",
-    "tooltiptweaks.options.value.shulker_box.inventory": "§aInventory",
-    "tooltiptweaks.options.value.shulker_box.automatic": "§aAutomatic",
+    "tooltiptweaks.options.value.container.per_stack": "§aList (per Stack)",
+    "tooltiptweaks.options.value.container.per_item": "§aList (per Item)",
+    "tooltiptweaks.options.value.container.inventory": "§aInventory",
+    "tooltiptweaks.options.value.container.automatic": "§aAutomatic",
 
-    "tooltiptweaks.section.durability": "Durability",
-    "tooltiptweaks.section.food": "Food",
-    "tooltiptweaks.section.tools": "Etc",
-
-    "tooltiptweaks.ui.clock.unknown": "???",
+    "tooltiptweaks.ui.unknown": "???",
     "tooltiptweaks.ui.lodestone_compass.dimension": "Dimension: \"%s\"",
     "tooltiptweaks.ui.lodestone_compass.position": "Linked to \"%s, %s, %s\"",
     "tooltiptweaks.ui.lodestone_compass.unshifted": "Press SHIFT for coordinates...",
@@ -55,6 +56,6 @@
     "tooltiptweaks.ui.food.when_consumed": "When Consumed:",
     "tooltiptweaks.ui.food.when_fully_consumed": "When Fully Consumed:",
     "tooltiptweaks.ui.uses_left": "§7Uses Left: %s",
-    "tooltiptweaks.ui.shulker_box.entry": " x%s",
-    "tooltiptweaks.ui.shulker_box.more": "and %s more..."
+    "tooltiptweaks.ui.container.entry": " x%s",
+    "tooltiptweaks.ui.container.more": "and %s more..."
 }

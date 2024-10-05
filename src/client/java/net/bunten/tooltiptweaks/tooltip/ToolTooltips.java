@@ -24,7 +24,7 @@ public class ToolTooltips {
     private void addClockTooltips(ItemStack stack, List<Text> lines) {
         @Nullable var world = client.world;
 
-        var text = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.clock.unknown") : Text.literal(ClockUtil.getClockTime());
+        var text = !world.getDimension().natural() ? Text.translatable("tooltiptweaks.ui.unknown") : Text.literal(ClockUtil.getClockTime());
         var message = text.formatted(Formatting.GRAY);
 
         if (message != null) {

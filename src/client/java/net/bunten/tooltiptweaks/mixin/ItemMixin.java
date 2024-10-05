@@ -19,8 +19,8 @@ public abstract class ItemMixin {
 
     @Inject(method = "getTooltipData", at = @At("HEAD"), cancellable = true)
     public void getTooltipData(ItemStack stack, CallbackInfoReturnable<Optional<TooltipData>> info) {
-        byte display = TooltipTweaksMod.getConfig().shulkerBoxDisplay;
-        if (stack.getComponents().contains(DataComponentTypes.CONTAINER) && display > 1 && display != 4) {
+        byte display = TooltipTweaksMod.getConfig().containerDisplay;
+        if (stack.getComponents().contains(DataComponentTypes.CONTAINER) && display == 2) {
             ContainerComponent component = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
             info.setReturnValue(Optional.of(new ContainerInventoryTooltip(component)));
         }

@@ -23,7 +23,7 @@ public class ContainerTooltips {
 
     private final TooltipTweaksConfig config = TooltipTweaksMod.getConfig();
 
-    private void addEnhancedTooltips(ItemStack stack, List<Text> lines) {
+    private void addPerItemTooltips(ItemStack stack, List<Text> lines) {
 
         // Go through the inventory and add items to a HashMap
         for (ItemStack itemStack : stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT).iterateNonEmpty()) {
@@ -35,7 +35,7 @@ public class ContainerTooltips {
             }
         }
 
-        int maxrenderedLines = config.shulkerBoxEntries;
+        int maxrenderedLines = config.containerEntries;
         var renderedLines = 0;
         var moreItems = 0;
 
@@ -43,23 +43,23 @@ public class ContainerTooltips {
         for (var set : ITEM_COUNT_MAP.entrySet()) {
             var name = set.getKey().getName().copyContentOnly();
             var count = set.getValue();
-            
+
             if (renderedLines < maxrenderedLines) {
-                lines.add(name.formatted(Formatting.GRAY).append(Text.translatable("tooltiptweaks.ui.shulker_box.entry", count).formatted(Formatting.WHITE)));
+                lines.add(name.formatted(Formatting.GRAY).append(Text.translatable("tooltiptweaks.ui.container.entry", count).formatted(Formatting.WHITE)));
                 renderedLines++;
             } else {
                 moreItems++;
             }
-        }  
-        
-        if (renderedLines >= maxrenderedLines) {
-            lines.add(Text.translatable("tooltiptweaks.ui.shulker_box.more", moreItems).formatted(Formatting.ITALIC, Formatting.GRAY));
+        }
+
+        if (renderedLines >= maxrenderedLines && moreItems > 0) {
+            lines.add(Text.translatable("tooltiptweaks.ui.container.more", moreItems).formatted(Formatting.ITALIC, Formatting.GRAY));
         }
     }
 
-    private void addVanillaTooltips(ItemStack stack, List<Text> lines) {
+    private void addPerStackTooltips(ItemStack stack, List<Text> lines) {
 
-        int maxrenderedLines = config.shulkerBoxEntries;
+        int maxrenderedLines = config.containerEntries;
         var renderedLines = 0;
         var moreItems = 0;
 
@@ -68,15 +68,15 @@ public class ContainerTooltips {
             var count = itemStack.getCount();
 
             if (renderedLines < maxrenderedLines) {
-                lines.add(name.formatted(Formatting.GRAY).append(Text.translatable("tooltiptweaks.ui.shulker_box.entry", count).formatted(Formatting.WHITE)));
+                lines.add(name.formatted(Formatting.GRAY).append(Text.translatable("tooltiptweaks.ui.container.entry", count).formatted(Formatting.WHITE)));
                 renderedLines++;
             } else {
                 moreItems++;
             }
         }
-        
-        if (moreItems > 0) {
-            lines.add(Text.translatable("tooltiptweaks.ui.shulker_box.more", moreItems).formatted(Formatting.ITALIC, Formatting.GRAY));
+
+        if (renderedLines >= maxrenderedLines && moreItems > 0) {
+            lines.add(Text.translatable("tooltiptweaks.ui.container.more", moreItems).formatted(Formatting.ITALIC, Formatting.GRAY));
         }
     }
 
@@ -85,12 +85,12 @@ public class ContainerTooltips {
             lines.add(UNKNOWN_CONTENTS_TEXT);
         }
 
-        var display = config.shulkerBoxDisplay;
+        var display = config.containerDisplay;
         if (stack.getComponents().contains(DataComponentTypes.CONTAINER) && display < 2) {
-            if (display > 0 && display != 4) {
-                addEnhancedTooltips(stack, lines);
-            } else {
-                addVanillaTooltips(stack, lines);
+            if (display == 0) {
+                addPerItemTooltips(stack, lines);
+            } else if (display == 1) {
+                addPerStackTooltips(stack, lines);
             }
         }
     }

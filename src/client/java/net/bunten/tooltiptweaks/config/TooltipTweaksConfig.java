@@ -15,6 +15,6 @@ public class TooltipTweaksConfig {
     public byte clockTimeDisplay = 1;
     public boolean lodestoneCompassDisplay = false;
 
-    public byte shulkerBoxDisplay = 1;
-    public int shulkerBoxEntries = 6;
+    public byte containerDisplay = 1;
+    public int containerEntries = 6;
 }

@@ -1,5 +1,6 @@
 package net.bunten.tooltiptweaks.mixin;
 
+import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.item.Item;
@@ -21,7 +22,9 @@ public abstract class ShulkerBoxBlockMixin extends Block {
 
     @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
     private void appendToolTip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options, CallbackInfo info) {
-        info.cancel();
-        super.appendTooltip(stack, context, tooltip, options);
+        if (TooltipTweaksMod.getConfig().containerDisplay < 3) {
+            info.cancel();
+            super.appendTooltip(stack, context, tooltip, options);
+        }
     }
 }

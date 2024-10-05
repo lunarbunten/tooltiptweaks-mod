@@ -40,7 +40,7 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.durability.display"), new Byte [] {
             0, 1, 2
         }, config.durabilityDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.vanilla");
             case 1 -> Text.translatable("tooltiptweaks.options.value.percentage");
             default -> Text.translatable("tooltiptweaks.options.value.fraction");
         }).setSaveConsumer((newValue)->config.durabilityDisplay = newValue).build());
@@ -66,7 +66,7 @@ public class ConfigMenuScreen {
         }, config.foodDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.food_and_saturation");
             case 1 -> Text.translatable("tooltiptweaks.options.value.food_points_only");
-            default -> Text.translatable("tooltiptweaks.options.value.none");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodDisplay = newValue).build());
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.effects"), new Byte [] {
@@ -74,7 +74,7 @@ public class ConfigMenuScreen {
         }, config.foodEffectDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.effects.all");
             case 1 -> Text.translatable("tooltiptweaks.options.value.effects.positive");
-            default -> Text.translatable("tooltiptweaks.options.value.none");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.stew_effects"), new Byte [] {
@@ -82,14 +82,14 @@ public class ConfigMenuScreen {
         }, config.stewEffectDisplay).setDefaultValue((byte) 2).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.effects.all");
             case 1 -> Text.translatable("tooltiptweaks.options.value.effects.positive");
-            default -> Text.translatable("tooltiptweaks.options.value.none");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.stewEffectDisplay = newValue).build());
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.other_effects"), new Byte [] {
                 0, 1
         }, config.otherEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.effects.all");
-            default -> Text.translatable("tooltiptweaks.options.value.none");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.otherEffectDisplay = newValue).build());
     }
 
@@ -98,7 +98,7 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.display"), new Byte [] {
             0, 1, 2
         }, config.clockTimeDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.no");
+            case 0 -> Text.translatable("tooltiptweaks.options.value.vanilla");
             case 1 -> Text.translatable("tooltiptweaks.options.value.12hour");
             default -> Text.translatable("tooltiptweaks.options.value.24hour");
         }).setSaveConsumer((newValue)->config.clockTimeDisplay = newValue).build());
@@ -106,16 +106,15 @@ public class ConfigMenuScreen {
         // Lodestone Compass
         category.add(entryBuilder.startBooleanToggle(Text.translatable("tooltiptweaks.options.tools.compass.lodestone"), config.lodestoneCompassDisplay).setDefaultValue(false).setSaveConsumer(newValue -> config.lodestoneCompassDisplay = newValue).build());
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.shulker_box.display"), new Byte [] {
-            0, 1, 2, 3, 4
-        }, config.shulkerBoxDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.shulker_box.vanilla");
-            case 1 -> Text.translatable("tooltiptweaks.options.value.shulker_box.enhanced");
-            case 2 -> Text.translatable("tooltiptweaks.options.value.shulker_box.inventory");
-            case 3 -> Text.translatable("tooltiptweaks.options.value.shulker_box.automatic");
-            default -> Text.translatable("tooltiptweaks.options.value.none");
-        }).setSaveConsumer((newValue)->config.shulkerBoxDisplay = newValue).build());
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.container.display"), new Byte [] {
+            0, 1, 2, 3
+        }, config.containerDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.container.per_item");
+            case 1 -> Text.translatable("tooltiptweaks.options.value.container.per_stack");
+            case 2 -> Text.translatable("tooltiptweaks.options.value.container.inventory");
+            default -> Text.translatable("tooltiptweaks.options.value.vanilla");
+        }).setSaveConsumer((newValue)->config.containerDisplay = newValue).build());
 
-        category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.shulker_box.entries"), config.shulkerBoxEntries, 1, 27).setDefaultValue(6).setSaveConsumer(newValue -> config.shulkerBoxEntries = newValue).build());
+        category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.container.entries"), config.containerEntries, 1, 27).setDefaultValue(6).setSaveConsumer(newValue -> config.containerEntries = newValue).build());
     }
 }
