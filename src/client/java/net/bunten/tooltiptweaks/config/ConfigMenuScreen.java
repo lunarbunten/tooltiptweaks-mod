@@ -173,7 +173,7 @@ public class ConfigMenuScreen {
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.other_effects"), new Byte [] {
                 0, 1
         }, config.otherEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
-            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects").formatted(ENABLED_FORMATTING);
+            case 0 -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
             default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.otherEffectDisplay = newValue).build());
     }
