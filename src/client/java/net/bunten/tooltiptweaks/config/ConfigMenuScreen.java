@@ -58,7 +58,7 @@ public class ConfigMenuScreen {
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.moon_phase"), new Byte [] {
                 0, 1
-        }, config.clockMoonPhaseDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+        }, config.clockMoonPhaseDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.yes").formatted(ENABLED_FORMATTING);
             default -> Text.translatable("tooltiptweaks.options.value.no").formatted(DISABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.clockMoonPhaseDisplay = newValue).build());

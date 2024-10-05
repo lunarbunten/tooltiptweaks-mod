@@ -62,7 +62,7 @@ public class TooltipTweaksConfig {
     }
 
     public byte clockTimeDisplay = 1;
-    public byte clockMoonPhaseDisplay = 1;
+    public byte clockMoonPhaseDisplay = 0;
 
     public byte compassDisplay = 0;
     public byte containerDisplay = 0;
