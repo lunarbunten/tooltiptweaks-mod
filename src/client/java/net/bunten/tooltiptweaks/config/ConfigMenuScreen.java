@@ -127,7 +127,7 @@ public class ConfigMenuScreen {
 
         // Food Status Effects
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.effects"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.food_status_effects"), new Byte [] {
                 0, 1, 2
         }, config.foodEffectDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
@@ -135,9 +135,19 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
 
+        // Potion Status Effects
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.potion_status_effects"), new Byte [] {
+                0, 1, 2
+        }, config.foodEffectDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");
+            case 1 -> Text.translatable("tooltiptweaks.options.value.positive_effects");
+            default -> Text.translatable("tooltiptweaks.options.value.no");
+        }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
+
         // Suspicious Stew Status Effects
 
-        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.stew_effects"), new Byte [] {
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.suspicious_stew_status_effects"), new Byte [] {
                 0, 1, 2
         }, config.stewEffectDisplay).setDefaultValue((byte) 2).setNameProvider((value)-> switch (value) {
             case 0 -> Text.translatable("tooltiptweaks.options.value.all_effects");

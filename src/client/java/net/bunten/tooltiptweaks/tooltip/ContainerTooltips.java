@@ -80,7 +80,7 @@ public class ContainerTooltips {
         }
     }
 
-    public void addTooltips(ItemStack stack, List<Text> lines) {
+    public void register(ItemStack stack, List<Text> lines) {
         if (stack.contains(DataComponentTypes.CONTAINER_LOOT)) {
             lines.add(UNKNOWN_CONTENTS_TEXT);
         }

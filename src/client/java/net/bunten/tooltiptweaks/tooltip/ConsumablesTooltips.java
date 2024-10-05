@@ -13,8 +13,11 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.OminousBottleItem;
+import net.minecraft.item.PotionItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -35,7 +38,7 @@ public class ConsumablesTooltips {
     private static final Formatting NUTRITION_COLOR = Formatting.GOLD;
 
     private static final Formatting BENEFICIAL_STATUS_EFFECT_COLOR = Formatting.BLUE;
-    private static final Formatting NEUTRAL_STATUS_EFFECT_COLOR = Formatting.DARK_GRAY;
+    private static final Formatting NEUTRAL_STATUS_EFFECT_COLOR = Formatting.BLUE;
     private static final Formatting HARMFUL_STATUS_EFFECT_COLOR = Formatting.DARK_PURPLE;
 
     private static final Formatting POSITIVE_MODIFIER_COLOR = Formatting.DARK_GREEN;
@@ -83,10 +86,11 @@ public class ConsumablesTooltips {
         }
     }
 
-    private void addEffects(List<Text> lines, List<StatusEffectInstance> effects, int displayConfig) {
+    private void addEffects(ItemStack stack, List<Text> lines, List<StatusEffectInstance> effects, int displayConfig) {
         if (effects.isEmpty()) return;
 
         int i = 0;
+        float durationMultiplier = stack.isOf(Items.LINGERING_POTION) ? 0.25F : 1.0F;
 
         for (StatusEffectInstance instance : effects) {
             StatusEffectCategory category = instance.getEffectType().value().getCategory();
@@ -96,7 +100,7 @@ public class ConsumablesTooltips {
                 mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + instance.getAmplifier()));
 
             if (instance.getDuration() > 20)
-                mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(instance, 1.0F, client.world.getTickManager().getTickRate()));
+                mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(instance, durationMultiplier, client.world.getTickManager().getTickRate()));
 
             if (displayConfig == 0 || category != StatusEffectCategory.HARMFUL || creative()) {
                 if (i == 0) lines.add(STATUS_EFFECTS_HEADER);
@@ -140,11 +144,17 @@ public class ConsumablesTooltips {
             stack.get(DataComponentTypes.FOOD).effects().forEach(entry -> effects.add(entry.effect()));
         } else if (component == DataComponentTypes.SUSPICIOUS_STEW_EFFECTS) {
             stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS).effects().forEach(effect -> effects.add(effect.createStatusEffectInstance()));
+        } else if (component == DataComponentTypes.POTION_CONTENTS) {
+            stack.get(DataComponentTypes.POTION_CONTENTS).getEffects().forEach(effects::add);
+        } else if (component == DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER) {
+            Integer integer = stack.getOrDefault(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, 0);
+            return List.of(new StatusEffectInstance(StatusEffects.BAD_OMEN, 120000, integer, false, false, true));
         }
+
         return effects;
     }
 
-    private void addFoodTooltips(ItemStack stack, List<Text> lines) {
+    private void addConsumableTooltips(ItemStack stack, List<Text> lines) {
         ComponentType<?> component = DataComponentTypes.FOOD;
 
         byte displayConfig = config.foodEffectDisplay;
@@ -152,17 +162,25 @@ public class ConsumablesTooltips {
             component = DataComponentTypes.SUSPICIOUS_STEW_EFFECTS;
             displayConfig = config.stewEffectDisplay;
         }
+        if (stack.getItem() instanceof PotionItem) {
+            component = DataComponentTypes.POTION_CONTENTS;
+            displayConfig = config.potionEffectDisplay;
+        }
+        if (stack.isOf(Items.OMINOUS_BOTTLE)) {
+            component = DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER;
+            displayConfig = config.potionEffectDisplay;
+        }
 
         if (!stack.contains(component)) return;
 
-        addNutritionInfo(stack, lines);
+        if (!stack.isOf(Items.OMINOUS_BOTTLE)) addNutritionInfo(stack, lines);
 
-        if (displayConfig < 2 || creative()) addEffects(lines, getStatusEffects(stack, component), displayConfig);
+        if (displayConfig < 2 || creative()) addEffects(stack, lines, getStatusEffects(stack, component), displayConfig);
         if (config.modifierDisplay == 0 || creative()) addModifiers(stack, lines, component);
     }
 
-    public void addTooltips(ItemStack stack, List<Text> lines) {
-        addFoodTooltips(stack, lines);
+    public void register(ItemStack stack, List<Text> lines) {
+        addConsumableTooltips(stack, lines);
 
         // Add Honey Bottle Effects
         if (stack.isOf(Items.HONEY_BOTTLE) && (config.otherEffectDisplay < 1 || (config.otherEffectDisplay == 1 && creative()))) {

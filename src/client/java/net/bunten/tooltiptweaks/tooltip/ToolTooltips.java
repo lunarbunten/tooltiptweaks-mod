@@ -192,14 +192,11 @@ public class ToolTooltips {
         });
     }
 
-    public void addTooltips(ItemStack stack, List<Text> lines) {
+    public void register(ItemStack stack, List<Text> lines) {
         if (stack.isDamageable() && stack.isDamaged()) addDurabilityTooltip(stack, lines, stack.getMaxDamage(), stack.getDamage());
         addRepairCostTooltip(stack, lines);
         if (stack.isOf(Items.CLOCK) && config.clockTimeDisplay > 0) addClockTooltips(stack, lines);
         addCompassTooltips(stack, lines);
         addAxolotlVariantTooltips(stack, lines);
-        
-
-
     }
 }

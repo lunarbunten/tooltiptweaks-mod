@@ -20,8 +20,9 @@
     "tooltiptweaks.options.tools.container.entries": "Container List Entry Count",
 
     "tooltiptweaks.options.consumables.display": "Display Food Nourishment",
-    "tooltiptweaks.options.consumables.effects": "Display Status Effects",
-    "tooltiptweaks.options.consumables.stew_effects": "Display Suspicious Stew Status Effects",
+    "tooltiptweaks.options.consumables.food_status_effects": "Display Food Status Effects",
+    "tooltiptweaks.options.consumables.potion_status_effects": "Display Potion Status Effects",
+    "tooltiptweaks.options.consumables.suspicious_stew_status_effects": "Display Suspicious Stew Status Effects",
     "tooltiptweaks.options.consumables.modifiers": "Display Modifiers",
     "tooltiptweaks.options.consumables.other_effects": "Display Other Effects (Milk Bucket, Honey Bottle)",
 

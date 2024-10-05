@@ -11,6 +11,9 @@
   ],
   "mixins": [
     "ItemMixin",
+    "LingeringPotionItemMixin",
+    "OminousBottleItemMixin",
+    "PotionItemMixin",
     "SuspiciousStewItemMixin"
   ]
 }

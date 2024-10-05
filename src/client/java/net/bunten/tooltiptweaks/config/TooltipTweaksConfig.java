@@ -14,6 +14,7 @@ public class TooltipTweaksConfig {
 
     public byte foodDisplay = 0;
     public byte foodEffectDisplay = 1;
+    public byte potionEffectDisplay = 0;
     public byte stewEffectDisplay = 2;
     public byte modifierDisplay = 0;
     public byte otherEffectDisplay = 0;
