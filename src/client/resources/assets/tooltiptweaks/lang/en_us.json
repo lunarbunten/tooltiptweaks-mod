@@ -53,6 +53,7 @@
     "tooltiptweaks.ui.food.honey_bottle": "Removes Poison",
     "tooltiptweaks.ui.food.saturation": "%s Saturation",
     "tooltiptweaks.ui.food.when_consumed": "When Consumed:",
+    "tooltiptweaks.ui.food.when_fully_consumed": "When Fully Consumed:",
     "tooltiptweaks.ui.uses_left": "§7Uses Left: %s",
     "tooltiptweaks.ui.shulker_box.entry": " x%s",
     "tooltiptweaks.ui.shulker_box.more": "and %s more..."

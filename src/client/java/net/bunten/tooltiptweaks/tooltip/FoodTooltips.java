@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.item.ItemStack;
@@ -16,6 +15,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class FoodTooltips {
@@ -28,8 +28,21 @@ public class FoodTooltips {
     private static final Formatting OTHER_COLOR = Formatting.BLUE;
 
     private void addPrimaryTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
+
+        if (stack.isOf(Items.CAKE) && config.foodDisplay <= 1) {
+
+            lines.add(Text.literal(" "));
+            lines.add(Text.translatable("tooltiptweaks.ui.food.when_fully_consumed").formatted(Formatting.GRAY));
+
+            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.food", 2 * 7).formatted(FOOD_COLOR)));
+
+            if (config.foodDisplay == 0)
+                lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", "2.8").formatted(FOOD_COLOR)));
+        }
+
         if (!stack.getComponents().contains(DataComponentTypes.FOOD)) return;
         FoodComponent food = stack.getComponents().get(DataComponentTypes.FOOD);
+        if (food == null) return;
 
         // When Consumed
         if (config.foodDisplay <= 1 || (stack.isOf(Items.HONEY_BOTTLE)) && config.otherEffectDisplay < 1) {
@@ -41,14 +54,17 @@ public class FoodTooltips {
         if (config.foodDisplay <= 1)
             lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.food", food.nutrition()).formatted(FOOD_COLOR)));
 
+        String formattedSaturation = new DecimalFormat("#.#").format(food.saturation());
+
         // Add Saturation
         if (config.foodDisplay == 0)
-            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", food.saturation() * 2).formatted(FOOD_COLOR)));
+            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food.saturation", formattedSaturation).formatted(FOOD_COLOR)));
     }
 
     private void addFoodEffectTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
         if (!stack.getComponents().contains(DataComponentTypes.FOOD)) return;
         FoodComponent food = stack.getComponents().get(DataComponentTypes.FOOD);
+        if (food == null) return;
 
         if (config.foodEffectDisplay < 2 || (config.foodEffectDisplay == 2 && type.isCreative())) {
             int i = 0;
@@ -80,6 +96,7 @@ public class FoodTooltips {
     private void addStewTooltips(ItemStack stack, TooltipType type, List<Text> lines) {
         if (!stack.getComponents().contains(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS)) return;
         SuspiciousStewEffectsComponent stewEffects = stack.getComponents().get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+        if (stewEffects == null) return;
 
         if (config.stewEffectDisplay < 2 || (config.stewEffectDisplay == 2 && type.isCreative())) {
             int i = 0;
