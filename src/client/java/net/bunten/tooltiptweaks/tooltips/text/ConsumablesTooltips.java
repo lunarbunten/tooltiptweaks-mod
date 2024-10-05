@@ -16,6 +16,8 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -84,13 +86,25 @@ public class ConsumablesTooltips {
     }
 
     private void addEffects(ItemStack stack, List<Text> lines, List<StatusEffectInstance> effects, int displayConfig) {
-        if (effects.isEmpty()) return;
+        boolean isPotion = stack.getItem() instanceof PotionItem;
+        boolean notViable = !isPotion && effects.isEmpty();
+        boolean isWaterBottle = isPotion && stack.get(DataComponentTypes.POTION_CONTENTS).potion().get() == Potions.WATER;
+
+        if (notViable || isWaterBottle) {
+            return;
+        }
+
         if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
 
-        int i = 0;
+        boolean noEffects = true;
+
         float durationMultiplier = stack.isOf(Items.LINGERING_POTION) ? 0.25F : 1.0F;
 
+        lines.add(STATUS_EFFECTS_HEADER);
+
         for (StatusEffectInstance instance : effects) {
+            noEffects = false;
+
             StatusEffectCategory category = instance.getEffectType().value().getCategory();
             MutableText mutableText = Text.translatable(instance.getTranslationKey());
 
@@ -101,16 +115,17 @@ public class ConsumablesTooltips {
                 mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(instance, durationMultiplier, client.world.getTickManager().getTickRate()));
 
             if (displayConfig == 0 || category != StatusEffectCategory.HARMFUL || creative()) {
-                if (i == 0) lines.add(STATUS_EFFECTS_HEADER);
                 Formatting formatting = switch (category) {
                     case BENEFICIAL -> BENEFICIAL_STATUS_EFFECT_COLOR;
                     case NEUTRAL -> NEUTRAL_STATUS_EFFECT_COLOR;
                     default -> HARMFUL_STATUS_EFFECT_COLOR;
                 };
                 lines.add(Text.literal(" ").append(mutableText.formatted(formatting)));
-                i++;
             }
         }
+
+        if (noEffects) lines.add(Text.literal(" ").append(Text.translatable("effect.none").formatted(Formatting.DARK_GRAY)));
+
     }
 
     private void addModifiers(ItemStack stack, List<Text> lines, ComponentType<?> component) {
