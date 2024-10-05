@@ -36,7 +36,9 @@ public class ConfigMenuScreen {
     }
 
     private void addDurabilityOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
-        // Percentage / Fraction Display
+
+        // Display Style
+
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.durability.display"), new Byte [] {
             0, 1, 2
         }, config.durabilityDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
@@ -45,9 +47,12 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.fraction");
         }).setSaveConsumer((newValue)->config.durabilityDisplay = newValue).build());
 
+        // Decimal Count
+
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.durability.percentage.decimals"), config.percentageDecimalCount, 0, 4).setDefaultValue(0).setSaveConsumer(newValue -> config.percentageDecimalCount = newValue).build());
         
-        // Remaining Uses
+        // Display "Uses Left"
+
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.durability.remaininguses"), new Byte [] {
             0, 1, 2
         }, config.toolUsesLeft).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
@@ -55,11 +60,15 @@ public class ConfigMenuScreen {
             case 1 -> Text.translatable("tooltiptweaks.options.value.yes");
             default -> Text.translatable("tooltiptweaks.options.value.low_durability");
         }).setSaveConsumer((newValue)->config.toolUsesLeft = newValue).build());
+
+        // Threshold for "Uses Left"
                 
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.durability.remaininguses.threshold"), config.lowDurabilityThreshold, 0, 100).setDefaultValue(25).setSaveConsumer(newValue -> config.lowDurabilityThreshold = newValue).build());
     }
 
     private void addFoodOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
+
+        // Food Nourishment
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.display"), new Byte [] {
                 0, 1, 2
@@ -69,6 +78,8 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodDisplay = newValue).build());
 
+        // Food Status Effects
+
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.effects"), new Byte [] {
                 0, 1, 2
         }, config.foodEffectDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
@@ -77,6 +88,8 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.foodEffectDisplay = newValue).build());
 
+        // Suspicious Stew Status Effects
+
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.stew_effects"), new Byte [] {
                 0, 1, 2
         }, config.stewEffectDisplay).setDefaultValue((byte) 2).setNameProvider((value)-> switch (value) {
@@ -84,6 +97,8 @@ public class ConfigMenuScreen {
             case 1 -> Text.translatable("tooltiptweaks.options.value.effects.positive");
             default -> Text.translatable("tooltiptweaks.options.value.no");
         }).setSaveConsumer((newValue)->config.stewEffectDisplay = newValue).build());
+
+        // Other Effects
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.food.other_effects"), new Byte [] {
                 0, 1
@@ -94,7 +109,9 @@ public class ConfigMenuScreen {
     }
 
     private void addToolOptions(ConfigEntryBuilder entryBuilder, SubCategoryBuilder category) {
-        // Clock Time
+
+        // Clock Display Style
+
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.clock.display"), new Byte [] {
             0, 1, 2
         }, config.clockTimeDisplay).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
@@ -103,8 +120,7 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.24hour");
         }).setSaveConsumer((newValue)->config.clockTimeDisplay = newValue).build());
 
-        // Lodestone Compass
-        category.add(entryBuilder.startBooleanToggle(Text.translatable("tooltiptweaks.options.tools.compass.lodestone"), config.lodestoneCompassDisplay).setDefaultValue(false).setSaveConsumer(newValue -> config.lodestoneCompassDisplay = newValue).build());
+        // Container Display Style
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.container.display"), new Byte [] {
             0, 1, 2, 3
@@ -115,6 +131,18 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.vanilla");
         }).setSaveConsumer((newValue)->config.containerDisplay = newValue).build());
 
+        // Container Entry Count
+
         category.add(entryBuilder.startIntSlider(Text.translatable("tooltiptweaks.options.tools.container.entries"), config.containerEntries, 1, 27).setDefaultValue(6).setSaveConsumer(newValue -> config.containerEntries = newValue).build());
+
+        // Compass Display Style
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.tools.compass"), new Byte [] {
+                0, 1, 2
+        }, config.compassDisplay).setDefaultValue((byte) 0).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.compass.distance");
+            case 1 -> Text.translatable("tooltiptweaks.options.value.compass.coordinates");
+            default -> Text.translatable("tooltiptweaks.options.value.none");
+        }).setSaveConsumer((newValue)->config.compassDisplay = newValue).build());
     }
 }
