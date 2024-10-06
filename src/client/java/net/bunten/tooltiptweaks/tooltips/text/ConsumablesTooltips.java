@@ -92,6 +92,7 @@ public class ConsumablesTooltips {
         boolean isPotion = stack.getItem() instanceof PotionItem;
         boolean isWaterBottle = isPotion && stack.get(DataComponentTypes.POTION_CONTENTS).potion().get() == Potions.WATER;
 
+        if (isPotion && !config.updatePotionTooltips) return;
         if ((!isPotion && effects.isEmpty()) || isWaterBottle) return;
 
         if (isPotion && effects.isEmpty()) {
@@ -127,6 +128,9 @@ public class ConsumablesTooltips {
     }
 
     private void addModifiers(ItemStack stack, List<Text> lines, ComponentType<?> component) {
+        boolean isPotion = stack.getItem() instanceof PotionItem;
+        if (isPotion && !config.updatePotionTooltips) return;
+
         List<Pair<RegistryEntry<EntityAttribute>, EntityAttributeModifier>> modifiers = new ArrayList<>();
         getStatusEffects(stack, component).forEach((instance) -> instance.getEffectType().value().forEachAttributeModifier(instance.getAmplifier(), (attribute, modifier) -> modifiers.add(new Pair<>(attribute, modifier))));
 
