@@ -39,7 +39,7 @@ public class AxolotlVariantTooltip {
     private static final MapCodec<Variant> AXOLOTL_VARIANT_MAP_CODEC = Variant.CODEC.fieldOf("Variant");
 
     public void register(ItemStack stack, List<Text> lines) {
-        if (config.axolotlVariants == 1) return;
+        if (!config.displayAxolotlVariants) return;
 
         NbtComponent nbt = stack.getOrDefault(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT);
         if (nbt.isEmpty()) return;

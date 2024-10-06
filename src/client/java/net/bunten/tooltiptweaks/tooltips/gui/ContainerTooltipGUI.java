@@ -2,6 +2,7 @@ package net.bunten.tooltiptweaks.tooltips.gui;
 
 import net.bunten.tooltiptweaks.TooltipTweaksMod;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.config.options.ContainerStyle;
 import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -22,7 +23,7 @@ public class ContainerTooltipGUI extends AbstractTooltip {
 
     @Override
     public boolean canDisplay(ItemStack stack) {
-        return stack.getComponents().contains(DataComponentTypes.CONTAINER) && TooltipTweaksConfig.getInstance().containerDisplay == 2;
+        return stack.getComponents().contains(DataComponentTypes.CONTAINER) && TooltipTweaksConfig.getInstance().containerStyle == ContainerStyle.INVENTORY;
     }
 
     private boolean isEmpty() {

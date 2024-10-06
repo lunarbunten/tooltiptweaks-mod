@@ -1,6 +1,7 @@
 package net.bunten.tooltiptweaks.tooltips.text;
 
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.config.options.CompassDisplay;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -47,16 +48,16 @@ public class CompassTooltips {
         }
 
         target.ifPresent(global -> {
-            if (config.compassDisplay < 2) {
+            if (config.compassDisplay != CompassDisplay.DISABLED) {
                 BlockPos pos = global.pos();
                 if (Screen.hasShiftDown()) {
-                    if (config.compassDisplay == 0) {
+                    if (config.compassDisplay == CompassDisplay.DISTANCE) {
                         int int_distance = roundedHorizontalDistance(player.getBlockPos(), pos);
                         MutableText value = Text.translatable("tooltiptweaks.ui.distance.value", int_distance, Text.translatable("tooltiptweaks.ui.distance.append"));
                         MutableText unknown = Text.translatable("tooltiptweaks.ui.unknown");
 
                         lines.add(Text.translatable("tooltiptweaks.ui.distance", global.dimension() == world.getRegistryKey() ? value : unknown).formatted(Formatting.DARK_GREEN));
-                    } else if (config.compassDisplay == 1) {
+                    } else if (config.compassDisplay == CompassDisplay.COORDINATES) {
                         MutableText position = Text.translatable("tooltiptweaks.ui.position.coordinates", pos.getX(), pos.getY(), pos.getZ());
                         MutableText unknown_position = Text.translatable("tooltiptweaks.ui.unknown");
 

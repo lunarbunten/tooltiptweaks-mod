@@ -1,6 +1,7 @@
 package net.bunten.tooltiptweaks.tooltips.text;
 
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.config.options.ContainerStyle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
@@ -85,13 +86,10 @@ public class ContainerTooltips {
             lines.add(UNKNOWN_CONTENTS_TEXT);
         }
 
-        var display = config.containerDisplay;
-        if (stack.contains(DataComponentTypes.CONTAINER) && display < 2) {
-            if (display == 0) {
-                addPerItemTooltips(stack, lines);
-            } else if (display == 1) {
-                addPerStackTooltips(stack, lines);
-            }
+        var display = config.containerStyle;
+        if (stack.contains(DataComponentTypes.CONTAINER)) {
+            if (display == ContainerStyle.LIST_PER_ITEM) addPerItemTooltips(stack, lines);
+            if (display == ContainerStyle.LIST_PER_STACK) addPerStackTooltips(stack, lines);
         }
     }
 }

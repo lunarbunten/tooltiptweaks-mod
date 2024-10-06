@@ -17,7 +17,7 @@ public class DurabilityTooltips {
 
     private DecimalFormat getDurabilityDecimalFormat() {
         String string = "#";
-        for (int i = 0; i < config.percentageDecimalCount; i++) {
+        for (int i = 0; i < config.percentageDecimals; i++) {
             if (i == 0) {
                 string += ".";
             }
@@ -42,12 +42,12 @@ public class DurabilityTooltips {
         float percent = (durability / max) * 100;
 
         MutableText message;
-        switch (config.durabilityDisplay) {
-            case 1:
+        switch (config.durabilityStyle) {
+            case PERCENTAGE:
                 message = Text.translatable("tooltiptweaks.ui.durability", getDurabilityDecimalFormat().format(percent) + "%");
                 lines.add(message.setStyle(message.getStyle().withColor(getDurabilityTextColor(max, damage))));
                 break;
-            case 2:
+            case FRACTION:
                 message = Text.translatable("tooltiptweaks.ui.durability", (int) durability + " / " + (int) max);
                 lines.add(message.setStyle(message.getStyle().withColor(getDurabilityTextColor(max, damage))));
                 break;
@@ -55,7 +55,7 @@ public class DurabilityTooltips {
                 break;
         }
 
-        if (config.displayUsesLeft == 1 && percent <= 25) {
+        if (config.displayUsesLeft && percent <= 25) {
             message = Text.translatable("tooltiptweaks.ui.uses_left", new DecimalFormat("#").format(durability));
             lines.add(message.setStyle(message.getStyle().withColor(getDurabilityTextColor(max, damage))));
         }

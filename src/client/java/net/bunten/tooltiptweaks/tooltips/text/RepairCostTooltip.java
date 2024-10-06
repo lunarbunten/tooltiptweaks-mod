@@ -26,7 +26,7 @@ public class RepairCostTooltip {
     }
 
     public void register(ItemStack stack, List<Text> lines) {
-        if (!stack.contains(DataComponentTypes.REPAIR_COST)) return;
+        if (!stack.contains(DataComponentTypes.REPAIR_COST) || !config.displayRepairCost) return;
         Integer repairCost = stack.get(DataComponentTypes.REPAIR_COST);
         if (repairCost == null || repairCost < 1) return;
         MutableText message = Text.translatable("tooltiptweaks.ui.repair_cost", repairCost);

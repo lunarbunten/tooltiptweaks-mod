@@ -2,6 +2,10 @@ package net.bunten.tooltiptweaks.tooltips.text;
 
 import com.mojang.datafixers.util.Pair;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.config.options.EffectDisplay;
+import net.bunten.tooltiptweaks.config.options.NourishmentDisplay;
+import net.bunten.tooltiptweaks.config.options.NourishmentStyle;
+import net.bunten.tooltiptweaks.config.options.OtherEffectDisplay;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
@@ -16,7 +20,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
@@ -26,6 +29,7 @@ import net.minecraft.util.Formatting;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static net.bunten.tooltiptweaks.TooltipTweaksMod.creative;
 
@@ -64,68 +68,62 @@ public class ConsumablesTooltips {
     }
 
     private void addNutritionInfo(ItemStack stack, List<Text> lines) {
-        if (stack.isOf(Items.CAKE) && config.foodNourishmentDisplay <= 1) {
+        if (stack.isOf(Items.CAKE) && config.nourishmentDisplay != NourishmentDisplay.DISABLED) {
             addWhenConsumed(stack, lines, true);
             addFoodPoints(stack, lines, 14);
-            if (config.foodNourishmentDisplay == 1) addSaturation(stack, lines, 2.4F);
+            if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION) addSaturation(stack, lines, 2.4F);
         }
 
         if (stack.contains(DataComponentTypes.FOOD)) {
             FoodComponent food = stack.get(DataComponentTypes.FOOD);
             if (food == null) return;
 
-            if (config.foodNourishmentDisplay <= 1)
+            if (config.nourishmentDisplay != NourishmentDisplay.DISABLED) {
                 addWhenConsumed(stack, lines, false);
-
-            if (config.foodNourishmentDisplay <= 1)
                 addFoodPoints(stack, lines, food.nutrition());
+            }
 
-            if (config.foodNourishmentDisplay == 1)
+            if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION)
                 addSaturation(stack, lines, food.saturation());
         }
     }
 
-    private void addEffects(ItemStack stack, List<Text> lines, List<StatusEffectInstance> effects, int displayConfig) {
+    private void addEffects(ItemStack stack, List<Text> lines, List<StatusEffectInstance> effects, EffectDisplay style) {
         boolean isPotion = stack.getItem() instanceof PotionItem;
-        boolean notViable = !isPotion && effects.isEmpty();
         boolean isWaterBottle = isPotion && stack.get(DataComponentTypes.POTION_CONTENTS).potion().get() == Potions.WATER;
 
-        if (notViable || isWaterBottle) {
+        if ((!isPotion && effects.isEmpty()) || isWaterBottle) return;
+
+        if (isPotion && effects.isEmpty()) {
+            lines.add(Text.literal(" ").append(Text.translatable("effect.none").formatted(Formatting.DARK_GRAY)));
             return;
         }
 
-        if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
+        Stream<StatusEffectInstance> filtered = effects.stream().filter((instance) -> style == EffectDisplay.POSITIVE_EFFECTS_ONLY && !creative() ? instance.getEffectType().value().getCategory() != StatusEffectCategory.HARMFUL : true);
 
-        boolean noEffects = true;
+        if (filtered.count() > 0) {
+            if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
+            lines.add(STATUS_EFFECTS_HEADER);
 
-        float durationMultiplier = stack.isOf(Items.LINGERING_POTION) ? 0.25F : 1.0F;
+            filtered.forEach((instance) -> {
+                StatusEffectCategory category = instance.getEffectType().value().getCategory();
 
-        lines.add(STATUS_EFFECTS_HEADER);
+                MutableText text = Text.translatable(instance.getTranslationKey());
 
-        for (StatusEffectInstance instance : effects) {
-            noEffects = false;
+                if (instance.getAmplifier() > 0)
+                    text = Text.translatable("potion.withAmplifier", text, Text.translatable("potion.potency." + instance.getAmplifier()));
 
-            StatusEffectCategory category = instance.getEffectType().value().getCategory();
-            MutableText mutableText = Text.translatable(instance.getTranslationKey());
+                if (instance.getDuration() > 20)
+                    text = Text.translatable("potion.withDuration", text, StatusEffectUtil.getDurationText(instance, stack.isOf(Items.LINGERING_POTION) ? 0.25F : 1.0F, client.world.getTickManager().getTickRate()));
 
-            if (instance.getAmplifier() > 0)
-                mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + instance.getAmplifier()));
-
-            if (instance.getDuration() > 20)
-                mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(instance, durationMultiplier, client.world.getTickManager().getTickRate()));
-
-            if (displayConfig == 0 || category != StatusEffectCategory.HARMFUL || creative()) {
                 Formatting formatting = switch (category) {
                     case BENEFICIAL -> BENEFICIAL_STATUS_EFFECT_COLOR;
                     case NEUTRAL -> NEUTRAL_STATUS_EFFECT_COLOR;
                     default -> HARMFUL_STATUS_EFFECT_COLOR;
                 };
-                lines.add(Text.literal(" ").append(mutableText.formatted(formatting)));
-            }
+                lines.add(Text.literal(" ").append(text.formatted(formatting)));
+            });
         }
-
-        if (noEffects) lines.add(Text.literal(" ").append(Text.translatable("effect.none").formatted(Formatting.DARK_GRAY)));
-
     }
 
     private void addModifiers(ItemStack stack, List<Text> lines, ComponentType<?> component) {
@@ -162,42 +160,42 @@ public class ConsumablesTooltips {
     }
 
     private void addConsumableTooltips(ItemStack stack, List<Text> lines) {
-        if (!stack.isOf(Items.OMINOUS_BOTTLE) && config.foodDisplayStyle == 0) addNutritionInfo(stack, lines);
+        if (!stack.isOf(Items.OMINOUS_BOTTLE) && config.nourishmentStyle == NourishmentStyle.TEXT) addNutritionInfo(stack, lines);
 
         ComponentType<?> effectComponent = DataComponentTypes.FOOD;
 
-        byte displayConfig = config.foodEffectDisplay;
+        EffectDisplay style = config.foodEffectDisplay;
+        
         if (stack.isOf(Items.SUSPICIOUS_STEW)) {
             effectComponent = DataComponentTypes.SUSPICIOUS_STEW_EFFECTS;
-            displayConfig = config.stewEffectDisplay;
+            style = config.stewEffectDisplay;
         }
         if (stack.getItem() instanceof PotionItem) {
             effectComponent = DataComponentTypes.POTION_CONTENTS;
-            displayConfig = config.potionEffectDisplay;
+            style = EffectDisplay.ALL_EFFECTS;
         }
         if (stack.isOf(Items.OMINOUS_BOTTLE)) {
             effectComponent = DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER;
-            displayConfig = config.potionEffectDisplay;
+            style = EffectDisplay.ALL_EFFECTS;
         }
 
         if (!stack.contains(effectComponent)) return;
 
-        if (displayConfig < 2 || creative()) addEffects(stack, lines, getStatusEffects(stack, effectComponent), displayConfig);
-        if (config.modifierDisplay == 0 || creative()) addModifiers(stack, lines, effectComponent);
+        if (EffectDisplay.canDisplay(style)) addEffects(stack, lines, getStatusEffects(stack, effectComponent), style);
+        if (config.modifierDisplay == OtherEffectDisplay.ENABLED || (config.modifierDisplay == OtherEffectDisplay.CREATIVE_ONLY && creative()))
+            addModifiers(stack, lines, effectComponent);
     }
 
     public void register(ItemStack stack, List<Text> lines) {
         addConsumableTooltips(stack, lines);
 
-        // Add Honey Bottle Effects
-        if (stack.isOf(Items.HONEY_BOTTLE) && (config.otherEffectDisplay < 1 || (config.otherEffectDisplay == 1 && creative()))) {
-            if (!lines.contains(WHEN_CONSUMED_HEADER)) addWhenConsumed(stack, lines, false);
-            lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.honey_bottle_effect").formatted(NUTRITION_COLOR)));
-        }
+        if (config.otherEffectDisplay == OtherEffectDisplay.ENABLED || (config.otherEffectDisplay == OtherEffectDisplay.CREATIVE_ONLY && creative())) {
+            if (stack.isOf(Items.HONEY_BOTTLE)) {
+                if (!lines.contains(WHEN_CONSUMED_HEADER)) addWhenConsumed(stack, lines, false);
+                lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.honey_bottle_effect").formatted(NUTRITION_COLOR)));
+            }
 
-        // Add Milk Bucket Effects
-        if (stack.isOf(Items.MILK_BUCKET)) {
-            if (config.otherEffectDisplay < 1 || (config.otherEffectDisplay == 1 && creative())) {
+            if (stack.isOf(Items.MILK_BUCKET)) {
                 if (!lines.contains(WHEN_CONSUMED_HEADER)) addWhenConsumed(stack, lines, false);
                 lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.milk_bucket_effect").formatted(NUTRITION_COLOR)));
             }

@@ -1,5 +1,6 @@
 package net.bunten.tooltiptweaks.mixin;
 
+import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.OminousBottleItem;
@@ -21,7 +22,9 @@ public abstract class OminousBottleItemMixin extends Item {
 
     @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type, CallbackInfo info) {
-        info.cancel();
-        super.appendTooltip(stack, context, tooltip, type);
+        if (TooltipTweaksConfig.getInstance().updatePotionTooltips) {
+            info.cancel();
+            super.appendTooltip(stack, context, tooltip, type);
+        }
     }
 }

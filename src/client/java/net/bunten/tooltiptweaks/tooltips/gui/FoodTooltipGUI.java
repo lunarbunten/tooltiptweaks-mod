@@ -2,6 +2,9 @@ package net.bunten.tooltiptweaks.tooltips.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.config.options.IconLocation;
+import net.bunten.tooltiptweaks.config.options.NourishmentDisplay;
+import net.bunten.tooltiptweaks.config.options.NourishmentStyle;
 import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -35,25 +38,25 @@ public class FoodTooltipGUI extends AbstractTooltip {
 
     @Override
     public boolean canDisplay(ItemStack stack) {
-        if (config.foodDisplayStyle == 0) return false;
-        if (config.foodNourishmentDisplay > 1) return false;
+        if (config.nourishmentStyle != NourishmentStyle.ICONS) return false;
+        if (config.nourishmentDisplay == NourishmentDisplay.DISABLED) return false;
         if (stack.isOf(Items.OMINOUS_BOTTLE)) return false;
         return stack.getComponents().contains(DataComponentTypes.FOOD) || stack.isOf(Items.CAKE);
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        int offset = config.foodIconLocation == 1 ? 0 : textRenderer.getWidth(stack.getName());
+        int offset = config.nourishmentIconLocation == IconLocation.BELOW ? 0 : textRenderer.getWidth(stack.getName());
         int width = getNutrition() * 4;
 
-        if (config.foodNourishmentDisplay == 1) width = Math.max(width, getSaturation() * 4);
+        if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION) width = Math.max(width, getSaturation() * 4);
 
         return offset + width + 4;
     }
 
     @Override
     public int getHeight() {
-        return (config.foodIconLocation == 1) ? 12 : 0;
+        return (config.nourishmentIconLocation == IconLocation.BELOW) ? 12 : 0;
     }
 
     private int getNutrition() {
@@ -69,8 +72,8 @@ public class FoodTooltipGUI extends AbstractTooltip {
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         RenderSystem.enableBlend();
 
-        int xOffset = (config.foodIconLocation == 0) ? textRenderer.getWidth(stack.getName()) + 2 : 0;
-        int yOffset = (config.foodIconLocation == 0) ? -12 : 0;
+        int xOffset = (config.nourishmentIconLocation == IconLocation.BESIDE) ? textRenderer.getWidth(stack.getName()) + 2 : 0;
+        int yOffset = (config.nourishmentIconLocation == IconLocation.BESIDE) ? -12 : 0;
 
         int rx = x + xOffset;
         int ry = y + yOffset;
@@ -85,7 +88,7 @@ public class FoodTooltipGUI extends AbstractTooltip {
                 context.drawGuiTexture(FOOD_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
             }
 
-            if (config.foodNourishmentDisplay == 1) {
+            if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION) {
                 if (index * 2 + 1 < getSaturation()) {
                     context.drawGuiTexture(SATURATION_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
                 }
