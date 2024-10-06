@@ -21,6 +21,7 @@
     "tooltiptweaks.options.tools.repair_cost": "Show Repair Cost",
 
     "tooltiptweaks.options.consumables.food_display_style": "Food Nourishment Display Style",
+    "tooltiptweaks.options.consumables.food_icon_location": "Food Icons' Display Location",
     "tooltiptweaks.options.consumables.food_nourishment": "Display Food Nourishment",
     "tooltiptweaks.options.consumables.food_status_effects": "Display Food Status Effects",
     "tooltiptweaks.options.consumables.potion_status_effects": "Display Potion Status Effects",
@@ -44,6 +45,8 @@
     "tooltiptweaks.options.value.food_points_only": "Food Points Only",
     "tooltiptweaks.options.value.fraction": "Fraction",
     "tooltiptweaks.options.value.no": "No",
+    "tooltiptweaks.options.value.below": "Below",
+    "tooltiptweaks.options.value.beside": "Beside",
     "tooltiptweaks.options.value.icons": "Icons",
     "tooltiptweaks.options.value.text": "Text",
     "tooltiptweaks.options.value.none": "None",

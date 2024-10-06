@@ -74,6 +74,8 @@ public class TooltipTweaksConfig {
     public byte repairCostDisplay = 0;
 
     public byte foodDisplayStyle = 0;
+    public byte foodIconLocation = 1;
+
     public byte foodNourishmentDisplay = 0;
     public byte foodEffectDisplay = 1;
     public byte potionEffectDisplay = 0;

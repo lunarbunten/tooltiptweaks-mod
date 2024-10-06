@@ -11,12 +11,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
+import static net.bunten.tooltiptweaks.TooltipTweaksMod.id;
+
 public class FoodTooltipGUI extends AbstractTooltip {
+
     private ItemStack stack;
     private FoodComponent component;
 
+    private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
+
     private static final Identifier FOOD_HALF_TEXTURE = Identifier.ofVanilla("hud/food_half");
     private static final Identifier FOOD_FULL_TEXTURE = Identifier.ofVanilla("hud/food_full");
+
+    private static final Identifier SATURATION_HALF_TEXTURE = id("hud/saturation_half");
+    private static final Identifier SATURATION_FULL_TEXTURE = id("hud/saturation_full");
 
     @Override
     public AbstractTooltip withStack(ItemStack stack) {
@@ -27,32 +35,45 @@ public class FoodTooltipGUI extends AbstractTooltip {
 
     @Override
     public boolean canDisplay(ItemStack stack) {
-        if (TooltipTweaksConfig.getInstance().foodDisplayStyle == 0) return false;
-        if (TooltipTweaksConfig.getInstance().foodNourishmentDisplay > 1) return false;
+        if (config.foodDisplayStyle == 0) return false;
+        if (config.foodNourishmentDisplay > 1) return false;
         if (stack.isOf(Items.OMINOUS_BOTTLE)) return false;
         return stack.getComponents().contains(DataComponentTypes.FOOD) || stack.isOf(Items.CAKE);
     }
 
     @Override
-    public int getHeight() {
-        return 0;
+    public int getWidth(TextRenderer textRenderer) {
+        int offset = config.foodIconLocation == 1 ? 0 : textRenderer.getWidth(stack.getName());
+        int width = getNutrition() * 4;
+
+        if (config.foodNourishmentDisplay == 1) width = Math.max(width, getSaturation() * 4);
+
+        return offset + width + 4;
     }
 
     @Override
-    public int getWidth(TextRenderer textRenderer) {
-        return textRenderer.getWidth(stack.getName()) + (getNutrition() * 4) + 4;
+    public int getHeight() {
+        return (config.foodIconLocation == 1) ? 12 : 0;
     }
 
     private int getNutrition() {
         return stack.isOf(Items.CAKE) ? 14 : component.nutrition();
     }
 
+    private int getSaturation() {
+        float value = stack.isOf(Items.CAKE) ? 2.8F : component.saturation();
+        return (int) value;
+    }
+
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         RenderSystem.enableBlend();
 
-        int rx = x + textRenderer.getWidth(stack.getName()) + 2;
-        int ry = y - 12;
+        int xOffset = (config.foodIconLocation == 0) ? textRenderer.getWidth(stack.getName()) + 2 : 0;
+        int yOffset = (config.foodIconLocation == 0) ? -12 : 0;
+
+        int rx = x + xOffset;
+        int ry = y + yOffset;
 
         for (int index = 0; index < 10; index++) {
 
@@ -62,6 +83,16 @@ public class FoodTooltipGUI extends AbstractTooltip {
 
             if (index * 2 + 1 == getNutrition()) {
                 context.drawGuiTexture(FOOD_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
+            }
+
+            if (config.foodNourishmentDisplay == 1) {
+                if (index * 2 + 1 < getSaturation()) {
+                    context.drawGuiTexture(SATURATION_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
+                }
+
+                if (index * 2 + 1 == getSaturation()) {
+                    context.drawGuiTexture(SATURATION_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
+                }
             }
         }
 

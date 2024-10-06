@@ -136,6 +136,15 @@ public class ConfigMenuScreen {
             default -> Text.translatable("tooltiptweaks.options.value.icons").formatted(ENABLED_FORMATTING);
         }).setSaveConsumer((newValue)->config.foodDisplayStyle = newValue).build());
 
+        // Food Icon Location
+
+        category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.food_icon_location"), new Byte [] {
+                0, 1
+        }, config.foodIconLocation).setDefaultValue((byte) 1).setNameProvider((value)-> switch (value) {
+            case 0 -> Text.translatable("tooltiptweaks.options.value.beside").formatted(ENABLED_FORMATTING);
+            default -> Text.translatable("tooltiptweaks.options.value.below").formatted(ENABLED_FORMATTING);
+        }).setSaveConsumer((newValue)->config.foodIconLocation = newValue).build());
+
         // Food Nourishment
 
         category.add(entryBuilder.startSelector(Text.translatable("tooltiptweaks.options.consumables.food_nourishment"), new Byte [] {
