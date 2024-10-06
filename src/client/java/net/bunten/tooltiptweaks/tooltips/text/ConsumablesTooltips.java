@@ -99,9 +99,9 @@ public class ConsumablesTooltips {
             return;
         }
 
-        Stream<StatusEffectInstance> filtered = effects.stream().filter((instance) -> style == EffectDisplay.POSITIVE_EFFECTS_ONLY && !creative() ? instance.getEffectType().value().getCategory() != StatusEffectCategory.HARMFUL : true);
+        List<StatusEffectInstance> filtered = effects.stream().filter((instance) -> style == EffectDisplay.POSITIVE_EFFECTS_ONLY && !creative() ? instance.getEffectType().value().getCategory() != StatusEffectCategory.HARMFUL : true).toList();
 
-        if (filtered.count() > 0) {
+        if (!filtered.isEmpty()) {
             if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
             lines.add(STATUS_EFFECTS_HEADER);
 
