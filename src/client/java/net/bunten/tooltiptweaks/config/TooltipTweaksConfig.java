@@ -32,9 +32,10 @@ public class TooltipTweaksConfig {
     }
 
     @SerialEntry public boolean displayAxolotlVariants = true;
+    @SerialEntry public boolean displayDayNumber = false;
+    @SerialEntry public boolean displayMoonPhase = false;
     @SerialEntry public boolean displayRepairCost = false;
     @SerialEntry public boolean displayUsesLeft = false;
-    @SerialEntry public boolean showMoonPhase = false;
     @SerialEntry public boolean updatePotionTooltips = true;
 
     @SerialEntry public int containerEntries = 6;
@@ -74,8 +75,13 @@ public class TooltipTweaksConfig {
                                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ClockTime.class))
                                 .build())
                         .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("tooltiptweaks.option.tools.clock.day_number"))
+                                .binding(false, () -> config.displayDayNumber, value -> config.displayDayNumber = value)
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("tooltiptweaks.option.tools.clock.moon_phase"))
-                                .binding(false, () -> config.showMoonPhase, value -> config.showMoonPhase = value)
+                                .binding(false, () -> config.displayMoonPhase, value -> config.displayMoonPhase = value)
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
