@@ -33,7 +33,7 @@ public class ClockTooltips {
 
             int displayedHour = twelveHour ? (hour % 12 == 0 ? 12 : hour % 12) : hour;
 
-            String hourDisplay = String.format("%02d", displayedHour);
+            String hourDisplay = twelveHour ? String.format("%d", displayedHour) : String.format("%02d", displayedHour);
             String minuteDisplay = String.format("%02d", minute);
 
             MutableText suffix = twelveHour ? Text.translatable("tooltiptweaks.ui.clock." + (hour >= 12 ? "pm" : "am")) : Text.literal("");
