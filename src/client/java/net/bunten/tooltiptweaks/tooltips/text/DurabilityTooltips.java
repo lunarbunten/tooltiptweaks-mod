@@ -17,7 +17,7 @@ public class DurabilityTooltips {
 
     private DecimalFormat getDurabilityDecimalFormat() {
         String string = "#";
-        for (int i = 0; i < config.percentageDecimals; i++) {
+        for (int i = 0; i < config.percentageDigits; i++) {
             if (i == 0) {
                 string += ".";
             }
