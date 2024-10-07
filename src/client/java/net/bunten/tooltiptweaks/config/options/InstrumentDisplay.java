@@ -5,7 +5,7 @@ import net.minecraft.text.Text;
 
 public enum InstrumentDisplay implements NameableEnum {
     ENABLED,
-    WHILE_HOLDING_NOTE_BLOCKS,
+    WHILE_CARRYING_NOTE_BLOCKS,
     DISABLED;
 
     @Override

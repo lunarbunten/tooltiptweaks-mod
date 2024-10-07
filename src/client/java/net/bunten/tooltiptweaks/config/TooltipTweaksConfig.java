@@ -46,7 +46,7 @@ public class TooltipTweaksConfig {
     @SerialEntry public EffectDisplay foodEffectDisplay = EffectDisplay.POSITIVE_EFFECTS_ONLY;
     @SerialEntry public EffectDisplay stewEffectDisplay = EffectDisplay.CREATIVE_ONLY;
     @SerialEntry public IconLocation nourishmentIconLocation = IconLocation.BELOW;
-    @SerialEntry public InstrumentDisplay instrumentDisplay = InstrumentDisplay.WHILE_HOLDING_NOTE_BLOCKS;
+    @SerialEntry public InstrumentDisplay instrumentDisplay = InstrumentDisplay.WHILE_CARRYING_NOTE_BLOCKS;
     @SerialEntry public NourishmentDisplay nourishmentDisplay = NourishmentDisplay.FOOD_ONLY;
     @SerialEntry public NourishmentStyle nourishmentStyle = NourishmentStyle.TEXT;
     @SerialEntry public OtherEffectDisplay modifierDisplay = OtherEffectDisplay.ENABLED;
@@ -142,7 +142,7 @@ public class TooltipTweaksConfig {
                                 .build())
                         .option(Option.<InstrumentDisplay>createBuilder()
                                 .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_instrument"))
-                                .binding(InstrumentDisplay.WHILE_HOLDING_NOTE_BLOCKS, () -> config.instrumentDisplay, value -> config.instrumentDisplay = value)
+                                .binding(InstrumentDisplay.WHILE_CARRYING_NOTE_BLOCKS, () -> config.instrumentDisplay, value -> config.instrumentDisplay = value)
                                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_instrument.desc")).webpImage(id("textures/gui/other_tools/display_instrument.webp")).build())
                                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(InstrumentDisplay.class))
                                 .build())

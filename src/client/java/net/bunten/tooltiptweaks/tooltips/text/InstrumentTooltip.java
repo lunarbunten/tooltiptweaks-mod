@@ -29,7 +29,7 @@ public class InstrumentTooltip {
 
     public void register(ItemStack stack, List<Text> lines) {
         if (config.instrumentDisplay == InstrumentDisplay.DISABLED) return;
-        if (config.instrumentDisplay == InstrumentDisplay.WHILE_HOLDING_NOTE_BLOCKS) {
+        if (config.instrumentDisplay == InstrumentDisplay.WHILE_CARRYING_NOTE_BLOCKS) {
             ClientPlayerEntity player = client.player;
             if (player == null) return;
             if (!player.getInventory().containsAny(Set.of(Items.NOTE_BLOCK))) return;
