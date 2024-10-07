@@ -35,6 +35,7 @@ public class TooltipTweaksMod implements ClientModInitializer {
             new ConsumablesTooltips().register(stack, lines);
             new ContainerTooltips().register(stack, lines);
             new DurabilityTooltips().register(stack, lines);
+            new InstrumentTooltip().register(stack, lines);
             new RepairCostTooltip().register(stack, lines);
         });
     }

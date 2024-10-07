@@ -46,6 +46,7 @@ public class TooltipTweaksConfig {
     @SerialEntry public EffectDisplay foodEffectDisplay = EffectDisplay.POSITIVE_EFFECTS_ONLY;
     @SerialEntry public EffectDisplay stewEffectDisplay = EffectDisplay.CREATIVE_ONLY;
     @SerialEntry public IconLocation nourishmentIconLocation = IconLocation.BELOW;
+    @SerialEntry public InstrumentDisplay instrumentDisplay = InstrumentDisplay.WHILE_HOLDING_NOTE_BLOCKS;
     @SerialEntry public NourishmentDisplay nourishmentDisplay = NourishmentDisplay.FOOD_ONLY;
     @SerialEntry public NourishmentStyle nourishmentStyle = NourishmentStyle.TEXT;
     @SerialEntry public OtherEffectDisplay modifierDisplay = OtherEffectDisplay.ENABLED;
@@ -134,15 +135,21 @@ public class TooltipTweaksConfig {
                                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(CompassDisplay.class))
                                 .build())
                         .option(Option.<Boolean>createBuilder()
-                                .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_repair_cost"))
-                                .binding(false, () -> config.displayRepairCost, value -> config.displayRepairCost = value)
-                                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_repair_cost.desc")).webpImage(id("textures/gui/other_tools/repair_cost.webp")).build())
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_axolotl_variants"))
                                 .binding(true, () -> config.displayAxolotlVariants, value -> config.displayAxolotlVariants = value)
                                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_axolotl_variants.desc")).webpImage(id("textures/gui/other_tools/display_axolotl_variants.webp")).build())
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<InstrumentDisplay>createBuilder()
+                                .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_instrument"))
+                                .binding(InstrumentDisplay.WHILE_HOLDING_NOTE_BLOCKS, () -> config.instrumentDisplay, value -> config.instrumentDisplay = value)
+                                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_instrument.desc")).webpImage(id("textures/gui/other_tools/display_instrument.webp")).build())
+                                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(InstrumentDisplay.class))
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_repair_cost"))
+                                .binding(false, () -> config.displayRepairCost, value -> config.displayRepairCost = value)
+                                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_repair_cost.desc")).webpImage(id("textures/gui/other_tools/repair_cost.webp")).build())
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
