@@ -49,7 +49,7 @@ public class FoodTooltipGUI extends AbstractTooltip {
         int offset = config.nourishmentIconLocation == IconLocation.BELOW ? 0 : textRenderer.getWidth(stack.getName());
         int width = getNutrition() * 4;
 
-        if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION) width = Math.max(width, getSaturation() * 4);
+        if (config.nourishmentDisplay == NourishmentDisplay.NUTRITION_AND_SATURATION) width = Math.max(width, getSaturation() * 4);
 
         return offset + width + 4;
     }
@@ -88,7 +88,7 @@ public class FoodTooltipGUI extends AbstractTooltip {
                 context.drawGuiTexture(FOOD_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
             }
 
-            if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION) {
+            if (config.nourishmentDisplay == NourishmentDisplay.NUTRITION_AND_SATURATION) {
                 if (index * 2 + 1 < getSaturation()) {
                     context.drawGuiTexture(SATURATION_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
                 }

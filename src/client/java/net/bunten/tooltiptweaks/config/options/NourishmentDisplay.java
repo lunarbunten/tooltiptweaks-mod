@@ -4,8 +4,8 @@ import dev.isxander.yacl3.api.NameableEnum;
 import net.minecraft.text.Text;
 
 public enum NourishmentDisplay implements NameableEnum {
-    FOOD_ONLY,
-    FOOD_AND_SATURATION,
+    NUTRITION_ONLY,
+    NUTRITION_AND_SATURATION,
     DISABLED;
 
     @Override

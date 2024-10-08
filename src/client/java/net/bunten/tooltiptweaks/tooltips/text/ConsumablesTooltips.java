@@ -29,7 +29,6 @@ import net.minecraft.util.Formatting;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static net.bunten.tooltiptweaks.TooltipTweaksMod.creative;
 
@@ -58,8 +57,8 @@ public class ConsumablesTooltips {
         lines.add(line);
     }
 
-    private void addFoodPoints(ItemStack stack, List<Text> lines, int nutrition) {
-        lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.food_points", nutrition).formatted(NUTRITION_COLOR)));
+    private void addNutrition(ItemStack stack, List<Text> lines, int nutrition) {
+        lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.nutrition", nutrition).formatted(NUTRITION_COLOR)));
     }
 
     private void addSaturation(ItemStack stack, List<Text> lines, float saturation) {
@@ -70,8 +69,8 @@ public class ConsumablesTooltips {
     private void addNutritionInfo(ItemStack stack, List<Text> lines) {
         if (stack.isOf(Items.CAKE) && config.nourishmentDisplay != NourishmentDisplay.DISABLED) {
             addWhenConsumed(stack, lines, true);
-            addFoodPoints(stack, lines, 14);
-            if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION) addSaturation(stack, lines, 2.4F);
+            addNutrition(stack, lines, 14);
+            if (config.nourishmentDisplay == NourishmentDisplay.NUTRITION_AND_SATURATION) addSaturation(stack, lines, 2.4F);
         }
 
         if (stack.contains(DataComponentTypes.FOOD)) {
@@ -80,10 +79,10 @@ public class ConsumablesTooltips {
 
             if (config.nourishmentDisplay != NourishmentDisplay.DISABLED) {
                 addWhenConsumed(stack, lines, false);
-                addFoodPoints(stack, lines, food.nutrition());
+                addNutrition(stack, lines, food.nutrition());
             }
 
-            if (config.nourishmentDisplay == NourishmentDisplay.FOOD_AND_SATURATION)
+            if (config.nourishmentDisplay == NourishmentDisplay.NUTRITION_AND_SATURATION)
                 addSaturation(stack, lines, food.saturation());
         }
     }
@@ -96,8 +95,8 @@ public class ConsumablesTooltips {
         if ((!isPotion && effects.isEmpty()) || isWaterBottle) return;
 
         if (isPotion && effects.isEmpty()) {
-            if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
-            lines.add(STATUS_EFFECTS_HEADER);
+            if (!lines.contains(WHEN_CONSUMED_HEADER)) lines.add(STATUS_EFFECTS_HEADER);
+
 
             lines.add(Text.literal(" ").append(Text.translatable("effect.none").formatted(Formatting.DARK_GRAY)));
             return;

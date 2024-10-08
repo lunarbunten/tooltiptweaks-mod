@@ -47,7 +47,7 @@ public class TooltipTweaksConfig {
     @SerialEntry public EffectDisplay stewEffectDisplay = EffectDisplay.CREATIVE_ONLY;
     @SerialEntry public IconLocation nourishmentIconLocation = IconLocation.BELOW;
     @SerialEntry public InstrumentDisplay instrumentDisplay = InstrumentDisplay.WHILE_CARRYING_NOTE_BLOCKS;
-    @SerialEntry public NourishmentDisplay nourishmentDisplay = NourishmentDisplay.FOOD_ONLY;
+    @SerialEntry public NourishmentDisplay nourishmentDisplay = NourishmentDisplay.NUTRITION_ONLY;
     @SerialEntry public NourishmentStyle nourishmentStyle = NourishmentStyle.TEXT;
     @SerialEntry public OtherEffectDisplay modifierDisplay = OtherEffectDisplay.ENABLED;
     @SerialEntry public OtherEffectDisplay otherEffectDisplay = OtherEffectDisplay.ENABLED;
@@ -175,7 +175,7 @@ public class TooltipTweaksConfig {
                                 .build())
                         .option(Option.<NourishmentDisplay>createBuilder()
                                 .name(Text.translatable("tooltiptweaks.option.consumables.nourishment_display"))
-                                .binding(NourishmentDisplay.FOOD_ONLY, () -> config.nourishmentDisplay, value -> config.nourishmentDisplay = value)
+                                .binding(NourishmentDisplay.NUTRITION_ONLY, () -> config.nourishmentDisplay, value -> config.nourishmentDisplay = value)
                                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.consumables.nourishment_display.desc")).webpImage(id("textures/gui/food/nourishment_display.webp")).build())
                                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(NourishmentDisplay.class))
                                 .build())
