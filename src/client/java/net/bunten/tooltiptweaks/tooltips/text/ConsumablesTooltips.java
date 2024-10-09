@@ -95,8 +95,8 @@ public class ConsumablesTooltips {
         if ((!isPotion && effects.isEmpty()) || isWaterBottle) return;
 
         if (isPotion && effects.isEmpty()) {
-            if (!lines.contains(WHEN_CONSUMED_HEADER)) lines.add(STATUS_EFFECTS_HEADER);
-
+            if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
+            lines.add(STATUS_EFFECTS_HEADER);
 
             lines.add(Text.literal(" ").append(Text.translatable("effect.none").formatted(Formatting.DARK_GRAY)));
             return;
