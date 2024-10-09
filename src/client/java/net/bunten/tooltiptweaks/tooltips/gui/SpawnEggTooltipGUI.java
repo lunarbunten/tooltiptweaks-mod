@@ -1,6 +1,7 @@
 package net.bunten.tooltiptweaks.tooltips.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
 import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -31,6 +32,8 @@ public class SpawnEggTooltipGUI extends AbstractTooltip {
 
     @Override
     public boolean canDisplay(ItemStack stack) {
+        if (!TooltipTweaksConfig.getInstance().displaySpawnEgg) return false;
+
         String key = stack.isOf(Items.TRIAL_SPAWNER) ? "spawn_data" : "SpawnData";
         if (!stack.contains(DataComponentTypes.BLOCK_ENTITY_DATA)) return false;
 
@@ -66,14 +69,11 @@ public class SpawnEggTooltipGUI extends AbstractTooltip {
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        RenderSystem.enableBlend();
-
         if (item == null) return;
 
-        context.drawItem(item.getDefaultStack(), x, y);
+        RenderSystem.enableBlend();
 
-        int rx = x + textRenderer.getWidth(stack.getName()) + 2;
-        int ry = y - 12;
+        context.drawItem(item.getDefaultStack(), x, y);
 
         RenderSystem.disableBlend();
     }

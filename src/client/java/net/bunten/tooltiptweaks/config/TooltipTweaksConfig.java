@@ -32,7 +32,9 @@ public class TooltipTweaksConfig {
     @SerialEntry public boolean displayAxolotlVariants = true;
     @SerialEntry public boolean displayDayNumber = false;
     @SerialEntry public boolean displayMoonPhase = false;
+    @SerialEntry public boolean displayPaintings = true;
     @SerialEntry public boolean displayRepairCost = false;
+    @SerialEntry public boolean displaySpawnEgg = false;
     @SerialEntry public boolean displayUsesLeft = false;
     @SerialEntry public boolean updatePotionTooltips = true;
 
@@ -147,9 +149,21 @@ public class TooltipTweaksConfig {
                                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(InstrumentDisplay.class))
                                 .build())
                         .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_paintings"))
+                                .binding(true, () -> config.displayPaintings, value -> config.displayPaintings = value)
+                                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_paintings.desc")).webpImage(id("textures/gui/other_tools/display_paintings.webp")).build())
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_repair_cost"))
                                 .binding(false, () -> config.displayRepairCost, value -> config.displayRepairCost = value)
                                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_repair_cost.desc")).webpImage(id("textures/gui/other_tools/repair_cost.webp")).build())
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_spawn_egg"))
+                                .binding(false, () -> config.displaySpawnEgg, value -> config.displaySpawnEgg = value)
+                                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_spawn_egg.desc")).webpImage(id("textures/gui/other_tools/display_spawn_egg.webp")).build())
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
