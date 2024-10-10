@@ -32,6 +32,7 @@ public class TooltipTweaksMod implements ClientModInitializer {
         Reflection.initialize(TooltipTweaksConfig.class, ConvertibleTooltips.class);
 
         ItemTooltipCallback.EVENT.register((stack, context, type, tooltip) -> {
+            new AxolotlVariantTooltip().register(stack, tooltip);
             new ClockTooltips().register(stack, tooltip);
             new CompassTooltips().register(stack, tooltip);
             new ConsumablesTooltips().register(stack, tooltip);
