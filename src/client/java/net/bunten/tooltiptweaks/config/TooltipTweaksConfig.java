@@ -36,6 +36,7 @@ public class TooltipTweaksConfig {
     @SerialEntry public boolean displayRepairCost = false;
     @SerialEntry public boolean displaySpawnEgg = false;
     @SerialEntry public boolean displayUsesLeft = false;
+    @SerialEntry public boolean updateEnchantmentTooltips = true;
     @SerialEntry public boolean updatePotionTooltips = true;
 
     @SerialEntry public int containerEntries = 6;
@@ -164,6 +165,12 @@ public class TooltipTweaksConfig {
                                 .name(Text.translatable("tooltiptweaks.option.tools.other_tools.display_spawn_egg"))
                                 .binding(false, () -> config.displaySpawnEgg, value -> config.displaySpawnEgg = value)
                                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.display_spawn_egg.desc")).webpImage(id("textures/gui/other_tools/display_spawn_egg.webp")).build())
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("tooltiptweaks.option.tools.other_tools.update_enchantment_tooltips"))
+                                .binding(true, () -> config.updateEnchantmentTooltips, value -> config.updateEnchantmentTooltips = value)
+                                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.tools.other_tools.update_enchantment_tooltips.desc")).webpImage(id("textures/gui/other_tools/update_enchantment_tooltips.webp")).build())
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())

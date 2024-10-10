@@ -10,7 +10,10 @@
     "TooltipComponentMixin"
   ],
   "mixins": [
+    "EnchantmentMixin",
+    "ItemEnchantmentsComponentMixin",
     "ItemMixin",
+    "ItemStackMixin",
     "LingeringPotionItemMixin",
     "OminousBottleItemMixin",
     "PotionItemMixin",

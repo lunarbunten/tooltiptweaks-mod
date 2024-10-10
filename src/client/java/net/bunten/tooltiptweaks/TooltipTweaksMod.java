@@ -31,15 +31,12 @@ public class TooltipTweaksMod implements ClientModInitializer {
     public void onInitializeClient() {
         Reflection.initialize(TooltipTweaksConfig.class, ConvertibleTooltips.class);
 
-        ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
-            new AxolotlVariantTooltip().register(stack, lines);
-            new ClockTooltips().register(stack, lines);
-            new CompassTooltips().register(stack, lines);
-            new ConsumablesTooltips().register(stack, lines);
-            new ContainerTooltips().register(stack, lines);
-            new DurabilityTooltips().register(stack, lines);
-            new InstrumentTooltip().register(stack, lines);
-            new RepairCostTooltip().register(stack, lines);
+        ItemTooltipCallback.EVENT.register((stack, context, type, tooltip) -> {
+            new ClockTooltips().register(stack, tooltip);
+            new CompassTooltips().register(stack, tooltip);
+            new ConsumablesTooltips().register(stack, tooltip);
+            new ContainerTooltips().register(stack, tooltip);
+            new InstrumentTooltip().register(stack, tooltip);
         });
     }
 }
