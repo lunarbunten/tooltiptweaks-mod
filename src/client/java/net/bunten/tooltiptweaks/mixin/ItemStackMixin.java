@@ -26,21 +26,16 @@ import java.util.function.Consumer;
 public abstract class ItemStackMixin {
 
     @Unique
-    private List<Text> list;
+    private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
 
     @Unique
-    private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
+    private Consumer<Text> consumer;
 
     @Shadow public abstract boolean hasEnchantments();
 
     @ModifyVariable(method = "getTooltip", at = @At("STORE"), ordinal = 0)
-    private List<Text> setList(List<Text> list) {
-        return this.list = list;
-    }
-
-    @ModifyVariable(method = "getTooltip", at = @At("STORE"), ordinal = 0)
     private Consumer<Text> setConsumer(Consumer<Text> consumer) {
-        return consumer;
+        return this.consumer = consumer;
     }
 
     @WrapWithCondition(
@@ -48,21 +43,11 @@ public abstract class ItemStackMixin {
             at = @At(value = "INVOKE", target = "java/util/function/Consumer.accept (Ljava/lang/Object;)V")
     )
     private boolean shouldDisplay(Consumer<Text> instance, Object object) {
-        if (object == ScreenTexts.EMPTY && config.updateEnchantmentTooltips) return !hasEnchantments();
-        return true;
+        return object != ScreenTexts.EMPTY || !config.updateEnchantmentTooltips || !hasEnchantments();
     }
 
-    @WrapWithCondition(
-            method = "getTooltip",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V")
-    )
-    private boolean shouldCancelEnchantments(ItemStack instance, ComponentType<?> componentType, Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type) {
-        return componentType == DataComponentTypes.ENCHANTMENTS;
-    }
-
-    @Inject(method = "getTooltip", at = @At(value = "INVOKE", ordinal = 3, target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", shift = At.Shift.BEFORE))
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", ordinal = 2, target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", shift = At.Shift.AFTER))
     private void addHeaderIfMissing(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> info) {
-        if (!config.updateEnchantmentTooltips || !hasEnchantments()) return;
-        list.add(ScreenTexts.EMPTY);
+        if (config.updateEnchantmentTooltips && hasEnchantments()) consumer.accept(ScreenTexts.EMPTY);
     }
 }

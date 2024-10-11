@@ -27,9 +27,20 @@ public abstract class ItemMixin {
         });
     }
 
-    @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "appendTooltip", at = @At("HEAD"))
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type, CallbackInfo ci) {
         new DurabilityTooltips().register(stack, tooltip);
         new RepairCostTooltip().register(stack, tooltip);
+
+        new NutritionTooltips().register(stack, tooltip);
+        new OtherEffectTooltips().register(stack, tooltip);
+        new StatusEffectTooltips().register(stack, tooltip);
+
+        new AxolotlVariantTooltip().register(stack, tooltip);
+        new ClockTooltips().register(stack, tooltip);
+        new CompassTooltips().register(stack, tooltip);
+        new ContainerTooltips().register(stack, tooltip);
+
+        new InstrumentTooltip().register(stack, tooltip);
     }
 }

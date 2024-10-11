@@ -17,6 +17,7 @@
     "LingeringPotionItemMixin",
     "OminousBottleItemMixin",
     "PotionItemMixin",
-    "SuspiciousStewItemMixin"
+    "SuspiciousStewItemMixin",
+    "TippedArrowItemMixin"
   ]
 }

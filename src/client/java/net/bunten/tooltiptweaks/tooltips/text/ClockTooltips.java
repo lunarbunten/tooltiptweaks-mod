@@ -1,9 +1,8 @@
 package net.bunten.tooltiptweaks.tooltips.text;
 
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
-import net.bunten.tooltiptweaks.config.options.ClockTime;
+import net.bunten.tooltiptweaks.config.options.ClockTimeDisplay;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,7 +24,7 @@ public class ClockTooltips {
         MutableText value = UNKNOWN_TEXT;
 
         if (world.getDimension().natural()) {
-            boolean twelveHour = TooltipTweaksConfig.getInstance().clockTime == ClockTime.TWELVE_HOUR;
+            boolean twelveHour = TooltipTweaksConfig.getInstance().clockTimeDisplay == ClockTimeDisplay.TWELVE_HOUR;
             long time = MinecraftClient.getInstance().world.getTimeOfDay();
 
             int hour = (int) ((time / 1000L + 6L) % 24L);
@@ -61,9 +60,9 @@ public class ClockTooltips {
         MutableText timeText = getClockText(world);
         MutableText phaseText = getMoonPhaseText(world);
 
-        if (config.displayDayNumber && config.clockTime == ClockTime.DISABLED) lines.add(dayText.formatted(Formatting.GRAY));
+        if (config.displayDayNumber && config.clockTimeDisplay == ClockTimeDisplay.DISABLED) lines.add(dayText.formatted(Formatting.GRAY));
 
-        if (config.clockTime != ClockTime.DISABLED) {
+        if (config.clockTimeDisplay != ClockTimeDisplay.DISABLED) {
             MutableText value = config.displayDayNumber  ? Text.translatable("tooltiptweaks.ui.clock.multiple_values", dayText, timeText) : timeText;
             lines.add(value.formatted(Formatting.GRAY));
         }
