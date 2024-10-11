@@ -23,6 +23,8 @@
     "tooltiptweaks.option.display_axolotl_variants.desc": "Display the variants of Axolotls in buckets.",
     "tooltiptweaks.option.display_instrument": "Display Instrument Type",
     "tooltiptweaks.option.display_instrument.desc": "Display the type of instrument that the block gives Note Blocks.",
+    "tooltiptweaks.option.display_maps": "Display Maps",
+    "tooltiptweaks.option.display_maps.desc": "Display maps in the Map tooltip.",
     "tooltiptweaks.option.display_paintings": "Display Paintings",
     "tooltiptweaks.option.display_paintings.desc": "Display paintings in the Painting tooltip.",
     "tooltiptweaks.option.display_repair_cost": "Display Repair Cost",

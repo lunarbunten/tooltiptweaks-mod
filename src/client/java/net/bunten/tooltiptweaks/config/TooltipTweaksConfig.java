@@ -31,6 +31,7 @@ public class TooltipTweaksConfig {
 
     @SerialEntry public boolean displayAxolotlVariants = true;
     @SerialEntry public boolean displayDayNumber = false;
+    @SerialEntry public boolean displayMaps = true;
     @SerialEntry public boolean displayMoonPhase = false;
     @SerialEntry public boolean displayPaintings = true;
     @SerialEntry public boolean displayRepairCost = false;
@@ -91,6 +92,13 @@ public class TooltipTweaksConfig {
                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.container_entries.desc")).webpImage(id("textures/gui/previews/container_entries.webp")).build())
                 .binding(6, () -> config.containerEntries, value -> config.containerEntries = value)
                 .controller(opt -> IntegerSliderControllerBuilder.create(opt).range(1, 27).step(1))
+                .build();
+
+        Option<?> DISPLAY_MAPS = Option.<Boolean>createBuilder()
+                .name(Text.translatable("tooltiptweaks.option.display_maps"))
+                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.display_maps.desc")).webpImage(id("textures/gui/previews/display_maps.webp")).build())
+                .binding(true, () -> config.displayMaps, value -> config.displayMaps = value)
+                .controller(TickBoxControllerBuilder::create)
                 .build();
 
         Option<?> DURABILITY_DISPLAY_STYLE = Option.<DurabilityStyle>createBuilder()
@@ -194,6 +202,7 @@ public class TooltipTweaksConfig {
                         .option(COMPASS_DISPLAY_LOCATION)
                         .option(CONTAINER_DISPLAY_STYLE)
                         .option(CONTAINER_MAXIMUM_LIST_LENGTH)
+                        .option(DISPLAY_MAPS)
 
                         .build())
 

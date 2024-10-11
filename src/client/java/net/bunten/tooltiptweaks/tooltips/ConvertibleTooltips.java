@@ -1,9 +1,6 @@
 package net.bunten.tooltiptweaks.tooltips;
 
-import net.bunten.tooltiptweaks.tooltips.gui.ContainerTooltipGUI;
-import net.bunten.tooltiptweaks.tooltips.gui.FoodTooltipGUI;
-import net.bunten.tooltiptweaks.tooltips.gui.PaintingTooltipGUI;
-import net.bunten.tooltiptweaks.tooltips.gui.SpawnEggTooltipGUI;
+import net.bunten.tooltiptweaks.tooltips.gui.*;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.registry.Registry;
@@ -17,6 +14,7 @@ public class ConvertibleTooltips {
 
     public static final ConvertibleTooltipData CONTAINER = register("container", new ContainerTooltipGUI());
     public static final ConvertibleTooltipData FOOD = register("food", new FoodTooltipGUI());
+    public static final ConvertibleTooltipData MAP = register("map", new MapTooltipGUI());
     public static final ConvertibleTooltipData PAINTING = register("painting", new PaintingTooltipGUI());
     public static final ConvertibleTooltipData SPAWN_EGG = register("spawn_egg", new SpawnEggTooltipGUI());
 
