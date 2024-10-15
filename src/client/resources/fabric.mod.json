@@ -34,8 +34,8 @@
         "tooltiptweaks.mixins.json"
     ],
     "depends": {
-        "minecraft": ">=1.21",
-        "fabricloader": ">=00.16.5",
+        "minecraft": "1.21.1",
+        "fabricloader": ">=0.16.5",
         "fabric": ">=0.105.0",
         "modmenu": ">=11.0.2",
         "yet_another_config_lib_v3": ">=3.5.0"
