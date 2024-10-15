@@ -8,6 +8,7 @@ import net.bunten.tooltiptweaks.config.options.NourishmentStyle;
 import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.ItemStack;
@@ -55,7 +56,7 @@ public class FoodTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(TextRenderer textRenderer) {
         return (config.nourishmentIconLocation == IconLocation.BELOW) ? 12 : 0;
     }
 
@@ -69,7 +70,7 @@ public class FoodTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+    public void drawItems(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
         RenderSystem.enableBlend();
 
         int xOffset = (config.nourishmentIconLocation == IconLocation.BESIDE) ? textRenderer.getWidth(stack.getName()) + 2 : 0;
@@ -81,20 +82,20 @@ public class FoodTooltipGUI extends AbstractTooltip {
         for (int index = 0; index < 10; index++) {
 
             if (index * 2 + 1 < getNutrition()) {
-                context.drawGuiTexture(FOOD_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
+                context.drawGuiTexture(RenderLayer::getGuiTextured, FOOD_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
             }
 
             if (index * 2 + 1 == getNutrition()) {
-                context.drawGuiTexture(FOOD_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
+                context.drawGuiTexture(RenderLayer::getGuiTextured, FOOD_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
             }
 
             if (config.nourishmentDisplay == NourishmentDisplay.NUTRITION_AND_SATURATION) {
                 if (index * 2 + 1 < getSaturation()) {
-                    context.drawGuiTexture(SATURATION_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
+                    context.drawGuiTexture(RenderLayer::getGuiTextured, SATURATION_FULL_TEXTURE, rx + index * 8, ry, 9, 9);
                 }
 
                 if (index * 2 + 1 == getSaturation()) {
-                    context.drawGuiTexture(SATURATION_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
+                    context.drawGuiTexture(RenderLayer::getGuiTextured, SATURATION_HALF_TEXTURE, rx + index * 8, ry, 9, 9);
                 }
             }
         }

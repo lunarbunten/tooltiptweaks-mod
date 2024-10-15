@@ -6,6 +6,7 @@ import net.bunten.tooltiptweaks.config.options.ContainerStyle;
 import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class ContainerTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(TextRenderer textRenderer) {
         if (isEmpty()) return 0;
         return 59;
     }
@@ -43,10 +44,10 @@ public class ContainerTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+    public void drawItems(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
         if (isEmpty()) return;
 
-        context.drawTexture(TooltipTweaksMod.id("textures/gui/container.png"), x, y, 0, 0, 172, 64, 256, 128);
+        context.drawTexture(RenderLayer::getGuiTextured, TooltipTweaksMod.id("textures/gui/container.png"), x, y, 0, 0, 172, 64, 256, 128);
 
         int xOffset = 2;
         int yOffset = -16;
@@ -63,7 +64,7 @@ public class ContainerTooltipGUI extends AbstractTooltip {
             }
 
             context.drawItem(stack, x + xOffset, y + yOffset);
-            context.drawItemInSlot(textRenderer, stack, x + xOffset, y + yOffset);
+            context.drawStackOverlay(textRenderer, stack, x + xOffset, y + yOffset);
         }
     }
 }

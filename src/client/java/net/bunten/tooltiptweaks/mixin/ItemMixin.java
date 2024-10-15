@@ -33,7 +33,6 @@ public abstract class ItemMixin {
         new RepairCostTooltip().register(stack, tooltip);
 
         new NutritionTooltips().register(stack, tooltip);
-        new OtherEffectTooltips().register(stack, tooltip);
         new StatusEffectTooltips().register(stack, tooltip);
 
         new AxolotlVariantTooltip().register(stack, tooltip);

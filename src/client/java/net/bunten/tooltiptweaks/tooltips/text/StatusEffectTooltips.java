@@ -8,6 +8,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.ConsumableComponent;
+import net.minecraft.component.type.OminousBottleAmplifierComponent;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -18,6 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.TippedArrowItem;
+import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
+import net.minecraft.item.consume.ClearAllEffectsConsumeEffect;
+import net.minecraft.item.consume.RemoveEffectsConsumeEffect;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
@@ -35,13 +40,17 @@ public class StatusEffectTooltips {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final TooltipTweaksConfig config = TooltipTweaksConfig.getInstance();
 
+    private List<StatusEffectInstance> statusEffects;
+    private ComponentType<?> component;
+    private EffectDisplay style;
+
     private boolean configAllows(ItemStack stack) {
         if (stack.getItem() instanceof PotionItem) return config.updatePotionTooltips;
         if (stack.isOf(Items.TIPPED_ARROW) || stack.isOf(Items.SPECTRAL_ARROW)) return config.updateTippedArrowTooltips;
         return true;
     }
 
-    private List<StatusEffectInstance> getStatusEffects(ItemStack stack, ComponentType<?> component) {
+    private List<StatusEffectInstance> getAppliedStatusEffects(ItemStack stack, ComponentType<?> component) {
         List<StatusEffectInstance> effects = new ArrayList<>();
 
         if (stack.isOf(Items.SPECTRAL_ARROW)) {
@@ -51,30 +60,52 @@ public class StatusEffectTooltips {
 
         if (!stack.contains(component)) return effects;
 
-        if (component == DataComponentTypes.FOOD) {
-            stack.get(DataComponentTypes.FOOD).effects().forEach(entry -> effects.add(entry.effect()));
+        if (component == DataComponentTypes.CONSUMABLE) {
+            stack.get(DataComponentTypes.CONSUMABLE).onConsumeEffects().forEach(entry -> {
+                if (entry instanceof ApplyEffectsConsumeEffect effect) effects.addAll(effect.effects());
+            });
         }
+
         if (component == DataComponentTypes.SUSPICIOUS_STEW_EFFECTS) {
             stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS).effects().forEach(effect -> effects.add(effect.createStatusEffectInstance()));
         }
+
         if (component == DataComponentTypes.POTION_CONTENTS) {
             stack.get(DataComponentTypes.POTION_CONTENTS).getEffects().forEach(effects::add);
         }
+
         if (component == DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER) {
-            Integer integer = stack.getOrDefault(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, 0);
-            return List.of(new StatusEffectInstance(StatusEffects.BAD_OMEN, 120000, integer, false, false, true));
+            OminousBottleAmplifierComponent amplifier = stack.get(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER);
+            return List.of(new StatusEffectInstance(StatusEffects.BAD_OMEN, 120000, amplifier.value(), false, false, true));
         }
 
         return effects;
     }
 
-    private void addEffects(ItemStack stack, List<Text> lines, List<StatusEffectInstance> effects, EffectDisplay style) {
+    public void gatherEffects(ItemStack stack) {
+        if (stack.isOf(Items.SUSPICIOUS_STEW)) {
+            component = DataComponentTypes.SUSPICIOUS_STEW_EFFECTS;
+            style = config.stewEffectDisplay;
+        }
+        if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof TippedArrowItem) {
+            component = DataComponentTypes.POTION_CONTENTS;
+            style = EffectDisplay.ALL_EFFECTS;
+        }
+        if (stack.isOf(Items.OMINOUS_BOTTLE)) {
+            component = DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER;
+            style = EffectDisplay.ALL_EFFECTS;
+        }
+
+        statusEffects = getAppliedStatusEffects(stack, component);
+    }
+
+    private void addAppliedStatusEffects(ItemStack stack, List<Text> lines) {
         boolean isPotion = stack.getItem() instanceof PotionItem;
         boolean isWaterBottle = isPotion && stack.get(DataComponentTypes.POTION_CONTENTS).potion().get() == Potions.WATER;
 
-        if ((!isPotion && effects.isEmpty()) || isWaterBottle) return;
+        if ((!isPotion && statusEffects.isEmpty()) || isWaterBottle) return;
 
-        if (isPotion && effects.isEmpty()) {
+        if (isPotion && statusEffects.isEmpty()) {
             if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
             lines.add(STATUS_EFFECTS_HEADER);
 
@@ -82,7 +113,7 @@ public class StatusEffectTooltips {
             return;
         }
 
-        List<StatusEffectInstance> filtered = effects.stream().filter((instance) -> style == EffectDisplay.POSITIVE_EFFECTS_ONLY && !creative() ? instance.getEffectType().value().getCategory() != StatusEffectCategory.HARMFUL : true).toList();
+        List<StatusEffectInstance> filtered = statusEffects.stream().filter((instance) -> style == EffectDisplay.POSITIVE_EFFECTS_ONLY && !creative() ? instance.getEffectType().value().getCategory() != StatusEffectCategory.HARMFUL : true).toList();
 
         if (!filtered.isEmpty()) {
             if (!lines.contains(WHEN_CONSUMED_HEADER))  lines.add(Text.literal(" "));
@@ -109,9 +140,31 @@ public class StatusEffectTooltips {
         }
     }
 
-    private void addModifiers(List<Text> lines, List<StatusEffectInstance> effects) {
+    public void addRemoveEffectTooltips(ItemStack stack, List<Text> lines) {
+        if (OtherEffectDisplay.canDisplay(config.modifierDisplay) && stack.contains(DataComponentTypes.CONSUMABLE)) {
+            ConsumableComponent component = stack.get(DataComponentTypes.CONSUMABLE);
+
+            component.onConsumeEffects().forEach((effect) -> {
+                if (effect instanceof RemoveEffectsConsumeEffect remove) {
+                    remove.effects().forEach((entry) -> {
+                        if (!lines.contains(STATUS_EFFECTS_HEADER)) addConsumedHeader(stack, lines, false);
+                        lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.removes_prefix", Text.translatable(entry.value().getTranslationKey())).formatted(NEUTRAL_STATUS_EFFECT_COLOR)));
+                    });
+                }
+
+                if (effect instanceof ClearAllEffectsConsumeEffect) {
+                    if (!lines.contains(STATUS_EFFECTS_HEADER)) addConsumedHeader(stack, lines, false);
+                    lines.add(Text.literal(" ").append(Text.translatable("tooltiptweaks.ui.clears_all_effects").formatted(NEUTRAL_STATUS_EFFECT_COLOR)));
+                }
+            });
+        }
+    }
+
+    private void addModifiers(List<Text> lines) {
+        if (statusEffects.isEmpty()) return;
+
         List<Pair<RegistryEntry<EntityAttribute>, EntityAttributeModifier>> modifiers = new ArrayList<>();
-        effects.forEach((instance) -> instance.getEffectType().value().forEachAttributeModifier(instance.getAmplifier(), (attribute, modifier) -> modifiers.add(new Pair<>(attribute, modifier))));
+        statusEffects.forEach((instance) -> instance.getEffectType().value().forEachAttributeModifier(instance.getAmplifier(), (attribute, modifier) -> modifiers.add(new Pair<>(attribute, modifier))));
 
         if (modifiers.isEmpty()) return;
 
@@ -128,24 +181,10 @@ public class StatusEffectTooltips {
     }
 
     public void register(ItemStack stack, List<Text> lines) {
-        ComponentType<?> component = DataComponentTypes.FOOD;
-        EffectDisplay style = config.foodEffectDisplay;
+        gatherEffects(stack);
 
-        if (stack.isOf(Items.SUSPICIOUS_STEW)) {
-            component = DataComponentTypes.SUSPICIOUS_STEW_EFFECTS;
-            style = config.stewEffectDisplay;
-        }
-        if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof TippedArrowItem) {
-            component = DataComponentTypes.POTION_CONTENTS;
-            style = EffectDisplay.ALL_EFFECTS;
-        }
-        if (stack.isOf(Items.OMINOUS_BOTTLE)) {
-            component = DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER;
-            style = EffectDisplay.ALL_EFFECTS;
-        }
-
-        List<StatusEffectInstance> effects = getStatusEffects(stack, component);
-        if (EffectDisplay.canDisplay(style) && configAllows(stack)) addEffects(stack, lines, effects, style);
-        if (OtherEffectDisplay.canDisplay(config.modifierDisplay)) addModifiers(lines, effects);
+        if (EffectDisplay.canDisplay(style) && configAllows(stack)) addAppliedStatusEffects(stack, lines);
+        if (OtherEffectDisplay.canDisplay(config.otherEffectDisplay)) addRemoveEffectTooltips(stack, lines);
+        if (OtherEffectDisplay.canDisplay(config.modifierDisplay)) addModifiers(lines);
     }
 }

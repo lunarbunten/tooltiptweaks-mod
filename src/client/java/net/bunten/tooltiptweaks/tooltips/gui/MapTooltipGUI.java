@@ -5,6 +5,9 @@ import net.bunten.tooltiptweaks.tooltips.AbstractTooltip;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.MapRenderState;
+import net.minecraft.client.render.MapRenderer;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.DataComponentTypes;
@@ -19,6 +22,7 @@ public class MapTooltipGUI extends AbstractTooltip {
     MinecraftClient client = MinecraftClient.getInstance();
 
     private MapIdComponent component;
+    private final MapRenderState mapRenderState = new MapRenderState();
 
     @Nullable
     private MapState getMapState() {
@@ -44,15 +48,15 @@ public class MapTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(TextRenderer textRenderer) {
         return getMapState() != null ? 69 : 0;
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+    public void drawItems(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
         if (getMapState() == null) return;
 
-        context.drawGuiTexture(Identifier.ofVanilla("container/cartography_table/map"), x, y, 66, 66);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, Identifier.ofVanilla("container/cartography_table/map"), x, y, 66, 66);
 
         MatrixStack matrices = context.getMatrices();
 
@@ -61,7 +65,9 @@ public class MapTooltipGUI extends AbstractTooltip {
         matrices.translate(x + 4, y + 4, 1);
         matrices.scale(0.45F, 0.45F, 1.0F);
 
-        client.gameRenderer.getMapRenderer().draw(matrices, context.getVertexConsumers(), component, getMapState(), true, 15728880);
+        MapRenderer mapRenderer = client.getMapRenderer();
+        mapRenderer.update(component, getMapState(), mapRenderState);
+        context.draw(vertexConsumers -> mapRenderer.draw(mapRenderState, context.getMatrices(), vertexConsumers, true, 15728880));
 
         matrices.pop();
     }

@@ -48,7 +48,7 @@ public class SpawnEggTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight(TextRenderer textRenderer) {
         return 20;
     }
 
@@ -68,7 +68,7 @@ public class SpawnEggTooltipGUI extends AbstractTooltip {
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+    public void drawItems(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
         if (item == null) return;
 
         RenderSystem.enableBlend();

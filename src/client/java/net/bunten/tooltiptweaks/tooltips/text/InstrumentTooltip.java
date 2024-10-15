@@ -44,8 +44,8 @@ public class InstrumentTooltip {
                     case DRAGON -> EntityType.ENDER_DRAGON.getName().copy();
                     case PLAYER -> Text.translatable("tooltiptweaks.ui.instrument.custom_head");
                     default -> {
-                        var entity = Registries.ENTITY_TYPE.getOrEmpty(Identifier.of(skull.getSkullType().asString()));
-                        yield entity.isPresent() ? entity.get().getName().copy() : Text.literal("ERROR");
+                        var entity = Registries.ENTITY_TYPE.get(Identifier.of(skull.getSkullType().asString()));
+                        yield entity != null ? entity.getName().copy() : Text.literal("ERROR");
                     }
                 };
             }

@@ -6,7 +6,7 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 public abstract class AbstractTooltip implements ConvertibleTooltipData, TooltipComponent {
 
     @Override
-    public abstract int getHeight();
+    public abstract int getHeight(TextRenderer textRenderer);
 
     @Override
     public abstract int getWidth(TextRenderer textRenderer);
