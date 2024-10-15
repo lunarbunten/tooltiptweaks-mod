@@ -10,13 +10,22 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.map.MapState;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public class MapTooltipGUI extends AbstractTooltip {
 
     MinecraftClient client = MinecraftClient.getInstance();
 
     private MapIdComponent component;
+
+    @Nullable
+    private MapState getMapState() {
+        ClientWorld world = client.world;
+        if (world != null) return world.getMapState(component);
+        return null;
+    }
 
     @Override
     public AbstractTooltip withStack(ItemStack stack) {
@@ -31,27 +40,29 @@ public class MapTooltipGUI extends AbstractTooltip {
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return 66;
+        return getMapState() != null ? 66 : 0;
     }
 
     @Override
     public int getHeight() {
-        return 69;
+        return getMapState() != null ? 69 : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        ClientWorld world = client.world;
-        if (world != null) {
-            MatrixStack matrices = context.getMatrices();
+        if (getMapState() == null) return;
 
-            context.drawGuiTexture(Identifier.ofVanilla("container/cartography_table/map"), x, y, 66, 66);
+        context.drawGuiTexture(Identifier.ofVanilla("container/cartography_table/map"), x, y, 66, 66);
 
-            matrices.push();
-            matrices.translate(x + 4, y + 4, 1);
-            matrices.scale(0.45F, 0.45F, 1.0F);
-            client.gameRenderer.getMapRenderer().draw(matrices, context.getVertexConsumers(), component, world.getMapState(component), true, 15728880);
-            matrices.pop();
-        }
+        MatrixStack matrices = context.getMatrices();
+
+        matrices.push();
+
+        matrices.translate(x + 4, y + 4, 1);
+        matrices.scale(0.45F, 0.45F, 1.0F);
+
+        client.gameRenderer.getMapRenderer().draw(matrices, context.getVertexConsumers(), component, getMapState(), true, 15728880);
+
+        matrices.pop();
     }
 }
