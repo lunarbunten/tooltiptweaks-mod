@@ -16,7 +16,6 @@ public class ConvertibleTooltips {
     public static final ConvertibleTooltipData FOOD = register("food", new FoodTooltipGUI());
     public static final ConvertibleTooltipData MAP = register("map", new MapTooltipGUI());
     public static final ConvertibleTooltipData PAINTING = register("painting", new PaintingTooltipGUI());
-    public static final ConvertibleTooltipData PRICE = register("price", new PriceTooltipGUI());
     public static final ConvertibleTooltipData SPAWN_EGG = register("spawn_egg", new SpawnEggTooltipGUI());
 
     private static ConvertibleTooltipData register(String name, ConvertibleTooltipData element) {
