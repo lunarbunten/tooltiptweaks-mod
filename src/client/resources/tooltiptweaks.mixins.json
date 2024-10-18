@@ -10,6 +10,7 @@
     "TooltipComponentMixin"
   ],
   "mixins": [
+    "CrossbowItemMixin",
     "EnchantmentMixin",
     "ItemEnchantmentsComponentMixin",
     "ItemMixin",

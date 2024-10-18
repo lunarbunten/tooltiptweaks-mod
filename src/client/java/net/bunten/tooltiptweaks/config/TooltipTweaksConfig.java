@@ -47,6 +47,7 @@ public class TooltipTweaksConfig {
     @SerialEntry public ClockTimeDisplay clockTimeDisplay = ClockTimeDisplay.TWELVE_HOUR;
     @SerialEntry public CompassDisplay compassDisplay = CompassDisplay.DISTANCE;
     @SerialEntry public ContainerStyle containerStyle = ContainerStyle.LIST_PER_ITEM;
+    @SerialEntry public CrossbowDisplay updateCrossbowTooltips = CrossbowDisplay.WHITE_ITEM_TEXT;
     @SerialEntry public DurabilityStyle durabilityStyle = DurabilityStyle.PERCENTAGE;
     @SerialEntry public EffectDisplay foodEffectDisplay = EffectDisplay.POSITIVE_EFFECTS_ONLY;
     @SerialEntry public EffectDisplay stewEffectDisplay = EffectDisplay.CREATIVE_ONLY;
@@ -164,6 +165,13 @@ public class TooltipTweaksConfig {
                 .controller(TickBoxControllerBuilder::create)
                 .build();
 
+        Option<?> UPDATE_CROSSBOW_TOOLTIPS = Option.<CrossbowDisplay>createBuilder()
+                .name(Text.translatable("tooltiptweaks.option.update_crossbow_tooltips"))
+                .binding(CrossbowDisplay.WHITE_ITEM_TEXT, () -> config.updateCrossbowTooltips, value -> config.updateCrossbowTooltips = value)
+                .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.update_crossbow_tooltips.desc")).webpImage(id("textures/gui/previews/update_crossbow_tooltips.webp")).build())
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(CrossbowDisplay.class))
+                .build();
+
         Option<?> UPDATE_ENCHANTMENT_TOOLTIPS = Option.<Boolean>createBuilder()
                 .name(Text.translatable("tooltiptweaks.option.update_enchantment_tooltips"))
                 .binding(true, () -> config.updateEnchantmentTooltips, value -> config.updateEnchantmentTooltips = value)
@@ -188,6 +196,7 @@ public class TooltipTweaksConfig {
                         .option(DURABILITY_DIGIT_COUNT)
                         .option(DURABILITY_DISPLAY_USES_LEFT)
                         .option(DISPLAY_REPAIR_COST)
+                        .option(UPDATE_CROSSBOW_TOOLTIPS)
                         .option(UPDATE_ENCHANTMENT_TOOLTIPS)
                         .option(UPDATE_TIPPED_ARROW_TOOLTIPS)
 

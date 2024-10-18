@@ -53,6 +53,8 @@
     "tooltiptweaks.option.percentage_digits.desc": "The amount of digits that appear after the decimal for the \"Percentage\" display style.",
     "tooltiptweaks.option.stew_effect_display": "Display Suspicious Stew Status Effects",
     "tooltiptweaks.option.stew_effect_display.desc": "Display Suspicious Stew status effects.",
+    "tooltiptweaks.option.update_crossbow_tooltips": "Update Crossbow Tooltips",
+    "tooltiptweaks.option.update_crossbow_tooltips.desc": "Update the Crossbow tooltip colors to better match the other tooltips.",
     "tooltiptweaks.option.update_enchantment_tooltips": "Update Enchantment Tooltips",
     "tooltiptweaks.option.update_enchantment_tooltips.desc": "Update the Enchantment tooltips to put Enchantments in their own category.",
     "tooltiptweaks.option.update_potion_tooltips": "Update Potion Tooltips",
@@ -88,7 +90,6 @@
     "tooltiptweaks.ui.distance.value": "%s%s",
     "tooltiptweaks.ui.durability": "§7Durability: %s",
     "tooltiptweaks.ui.enchantments": "Enchantments:",
-    "tooltiptweaks.ui.removes_prefix": "Removes %s",
     "tooltiptweaks.ui.instrument": "Instrument: %s",
     "tooltiptweaks.ui.instrument.banjo": "Banjo",
     "tooltiptweaks.ui.instrument.basedrum": "Bass Drum",
@@ -111,6 +112,7 @@
     "tooltiptweaks.ui.nutrition": "%s Nutrition",
     "tooltiptweaks.ui.position": "XYZ: %s",
     "tooltiptweaks.ui.position.coordinates": "%s, %s, %s",
+    "tooltiptweaks.ui.removes_prefix": "Removes %s",
     "tooltiptweaks.ui.repair_cost": "§7Repair Cost: %s",
     "tooltiptweaks.ui.saturation": "%s Saturation",
     "tooltiptweaks.ui.status_effects": "Effects:",
@@ -128,6 +130,7 @@
     "tooltiptweaks.value.distance": "§aDistance",
     "tooltiptweaks.value.enabled": "§aEnabled",
     "tooltiptweaks.value.fraction": "§aFraction",
+    "tooltiptweaks.value.gray_item_text": "§aGray Item Text",
     "tooltiptweaks.value.icons": "§aIcons",
     "tooltiptweaks.value.inventory": "§aInventory",
     "tooltiptweaks.value.list_per_item": "§aList (per Item)",
@@ -140,5 +143,6 @@
     "tooltiptweaks.value.twelve_hour": "§a12 Hour",
     "tooltiptweaks.value.twenty_four_hour": "§a24 Hour",
     "tooltiptweaks.value.vanilla": "Vanilla",
-    "tooltiptweaks.value.while_carrying_note_blocks": "§eWhile Carrying Note Blocks"
+    "tooltiptweaks.value.while_carrying_note_blocks": "§eWhile Carrying Note Blocks",
+    "tooltiptweaks.value.white_item_text": "§aWhite Item Text"
 }
