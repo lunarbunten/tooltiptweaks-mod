@@ -1,7 +1,11 @@
 package net.bunten.tooltiptweaks.tooltips.text;
 
 import net.bunten.tooltiptweaks.config.TooltipTweaksConfig;
+import net.bunten.tooltiptweaks.config.options.RepairCostDisplay;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.AnvilScreen;
+import net.minecraft.client.gui.screen.ingame.GrindstoneScreen;
+import net.minecraft.client.gui.screen.ingame.SmithingScreen;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
@@ -22,17 +26,28 @@ public class RepairCostTooltip {
         float damage = Math.min(repairCost, max);
 
         float f = Math.max(0, (max - damage) / max);
-        return MathHelper.hsvToRgb(f / 3, 1, 1);
+        return MathHelper.hsvToRgb(f / 5, 1, 1);
+    }
+
+    private boolean canDisplay(ItemStack stack) {
+        if (!stack.contains(DataComponentTypes.REPAIR_COST) || config.repairCostDisplay == RepairCostDisplay.DISABLED) return false;
+
+        if (config.repairCostDisplay == RepairCostDisplay.ON_RELEVANT_MENUS) {
+            return client.currentScreen instanceof AnvilScreen || client.currentScreen instanceof GrindstoneScreen || client.currentScreen instanceof SmithingScreen;
+        }
+
+        return config.repairCostDisplay == RepairCostDisplay.ENABLED;
     }
 
     public void register(ItemStack stack, List<Text> lines) {
-        if (!stack.contains(DataComponentTypes.REPAIR_COST) || !config.displayRepairCost) return;
-        Integer repairCost = stack.get(DataComponentTypes.REPAIR_COST);
-        if (repairCost == null || repairCost < 1) return;
-        MutableText message = Text.translatable("tooltiptweaks.ui.repair_cost", repairCost);
+        if (canDisplay(stack)) {
+            Integer repairCost = stack.get(DataComponentTypes.REPAIR_COST);
+            if (repairCost == null || repairCost < 1) return;
+            MutableText message = Text.translatable("tooltiptweaks.ui.repair_cost", repairCost);
 
-        if (!creative() && repairCost + 1 >= 40) message = Text.translatable("tooltiptweaks.ui.cannot_repair");
+            if (!creative() && repairCost + 1 >= 40) message = Text.translatable("tooltiptweaks.ui.cannot_repair");
 
-        lines.add(message.setStyle(message.getStyle().withColor(getRepairCostTextColor(repairCost))));
+            lines.add(message.setStyle(message.getStyle().withColor(getRepairCostTextColor(repairCost))));
+        }
     }
 }

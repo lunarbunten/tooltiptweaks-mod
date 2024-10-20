@@ -34,7 +34,6 @@ public class TooltipTweaksConfig {
     @SerialEntry public boolean displayMaps = true;
     @SerialEntry public boolean displayMoonPhase = false;
     @SerialEntry public boolean displayPaintings = true;
-    @SerialEntry public boolean displayRepairCost = false;
     @SerialEntry public boolean displaySpawnEgg = false;
     @SerialEntry public boolean displayUsesLeft = false;
     @SerialEntry public boolean updateEnchantmentTooltips = true;
@@ -57,6 +56,7 @@ public class TooltipTweaksConfig {
     @SerialEntry public NourishmentStyle nourishmentStyle = NourishmentStyle.TEXT;
     @SerialEntry public OtherEffectDisplay modifierDisplay = OtherEffectDisplay.ENABLED;
     @SerialEntry public OtherEffectDisplay otherEffectDisplay = OtherEffectDisplay.ENABLED;
+    @SerialEntry public RepairCostDisplay repairCostDisplay = RepairCostDisplay.ON_RELEVANT_MENUS;
 
     private static ConfigCategory toolsCategory(TooltipTweaksConfig config) {
 
@@ -151,11 +151,11 @@ public class TooltipTweaksConfig {
                 .controller(TickBoxControllerBuilder::create)
                 .build();
 
-        Option<?> DISPLAY_REPAIR_COST = Option.<Boolean>createBuilder()
+        Option<?> DISPLAY_REPAIR_COST = Option.<RepairCostDisplay>createBuilder()
                 .name(Text.translatable("tooltiptweaks.option.display_repair_cost"))
-                .binding(false, () -> config.displayRepairCost, value -> config.displayRepairCost = value)
+                .binding(RepairCostDisplay.ON_RELEVANT_MENUS, () -> config.repairCostDisplay, value -> config.repairCostDisplay = value)
                 .description(OptionDescription.createBuilder().text(Text.translatable("tooltiptweaks.option.display_repair_cost.desc")).webpImage(id("textures/gui/previews/display_repair_cost.webp")).build())
-                .controller(TickBoxControllerBuilder::create)
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(RepairCostDisplay.class))
                 .build();
 
         Option<?> DISPLAY_SPAWN_EGG = Option.<Boolean>createBuilder()
