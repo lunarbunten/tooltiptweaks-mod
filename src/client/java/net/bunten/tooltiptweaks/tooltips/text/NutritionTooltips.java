@@ -34,7 +34,7 @@ public class NutritionTooltips {
         if (stack.isOf(Items.OMINOUS_BOTTLE) || config.nourishmentStyle != NourishmentStyle.TEXT) return;
 
         if (stack.isOf(Items.CAKE) && config.nourishmentDisplay != NourishmentDisplay.DISABLED) {
-            addConsumedHeader(stack, lines, true);
+            addConsumedHeader(lines, true);
             addNutrition(stack, lines, 14);
             if (config.nourishmentDisplay == NourishmentDisplay.NUTRITION_AND_SATURATION) addSaturation(stack, lines, 2.4F);
         }
@@ -44,7 +44,7 @@ public class NutritionTooltips {
             if (food == null) return;
 
             if (config.nourishmentDisplay != NourishmentDisplay.DISABLED) {
-                addConsumedHeader(stack, lines, false);
+                addConsumedHeader(lines, false);
                 addNutrition(stack, lines, food.nutrition());
             }
 

@@ -16,7 +16,9 @@
     "ItemMixin",
     "ItemStackMixin",
     "LingeringPotionItemMixin",
+    "OminousBottleAmplifierComponentMixin",
     "PotionItemMixin",
+    "SuspiciousStewEffectsComponentMixin",
     "TippedArrowItemMixin"
   ]
 }
