@@ -11,10 +11,6 @@ import java.util.List;
 
 public class CommonText {
 
-
-
-
-
     public static final Formatting NUTRITION_COLOR = Formatting.GOLD;
     
     public static final Formatting BENEFICIAL_STATUS_EFFECT_COLOR = Formatting.BLUE;
